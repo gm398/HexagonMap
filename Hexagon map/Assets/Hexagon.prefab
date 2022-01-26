@@ -274,7 +274,6 @@ MonoBehaviour:
   hexCoords: {fileID: 6642292662319206444}
   traversable: 1
   moveDificulty: 1
-  red: {fileID: 2100000, guid: a2b386eb9e2b1eb4c9067a78bb07f85e, type: 2}
 --- !u!114 &6582444294548839324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,7 +301,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hexCoordinatesRQS: {x: 0, y: 0, z: 0}
   worldCoords: {x: 0, y: 0, z: 0}
-  height: 0
 --- !u!1001 &1972870109712416004
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -382,9 +380,17 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8164078558771037576, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
