@@ -16,6 +16,7 @@ public class SelectionManager : MonoBehaviour
     [SerializeField] Material testMat;
 
     private Hex currentHex;
+    private GameObject currentSelection;
 
     private void Awake()
     {
@@ -33,6 +34,7 @@ public class SelectionManager : MonoBehaviour
         {
             hexGrid.RevertHexs();//resets all the hexes click states
             currentHex = null;
+            currentSelection = null;
 
             if (result.GetComponentInParent<Hex>() != null)
             {
@@ -43,7 +45,11 @@ public class SelectionManager : MonoBehaviour
                 currentHex = selectedHex;//currently selected hex
                 
             }
-            else { Debug.Log("not a hex"); }
+            else if(result.GetComponentInParent<UnitController>() != null)
+            {
+                currentSelection = result;
+            }
+            else { Debug.Log("not a valid selection"); }
         }
     }
     public void HandleRightClick(Vector3 mousePosition)
@@ -79,6 +85,10 @@ public class SelectionManager : MonoBehaviour
                         }
 
                     }
+                }
+                if(currentSelection != null)
+                {
+                    currentSelection.GetComponentInParent<UnitController>().SetTarget(result.GetComponentInParent<Hex>());
                 }
             }
             else { Debug.Log("not a hex"); }

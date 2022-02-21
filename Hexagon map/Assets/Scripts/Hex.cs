@@ -12,7 +12,10 @@ public class Hex : MonoBehaviour
     [SerializeField] bool traversable = true;
 
     [SerializeField] float moveDificulty = 1;
+    [SerializeField] Transform targetPoint;
 
+    private bool isOcupied = false;
+    private GameObject occupant;
     private Material origionalMaterial;
     private Material newMaterial;
 
@@ -54,5 +57,10 @@ public class Hex : MonoBehaviour
     public bool IsTraversable() { return traversable; }
     public HexCoordinates GetHexCoordinates() { return hexCoords; }
     public float GetMoveDificulty() { return moveDificulty; }
+    public Vector3 GetTargetPoint() { return targetPoint.position; }
+    public bool IsOccupied() { return isOcupied; }
+    public void SetOccupied(bool occupied) { isOcupied = occupied; }
+    public GameObject GetOccupant() { return occupant; }
+    public void SetOccupent(GameObject newOccupent) { occupant = newOccupent; }
 
 }

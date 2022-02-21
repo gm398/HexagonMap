@@ -35,15 +35,14 @@ public class CameraMovement : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Confined;
         }
+
+
+
+        float zoom = Input.mouseScrollDelta.y * zoomSpeed * Time.deltaTime;
+        currentZoom -= zoom;
         
-
-
-        //float zoom = Input.mouseScrollDelta.y * zoomSpeed;
-        float zoom = Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
-        currentZoom += zoom;
-        /*
         if(currentZoom < maxZoom) { currentZoom = maxZoom; }
         else if(currentZoom > minZoom) { currentZoom = minZoom; }
-        */
+        cam.orthographicSize = currentZoom;
     }
 }
