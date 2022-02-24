@@ -27,12 +27,18 @@ public class HexGrid : MonoBehaviour
     {
 
     }
+
+    [ContextMenu("Test")]
+    public void TestPrint()
+    {
+        Debug.Log("hello world");
+    }
     
-    public bool FindPath(Hex start, Hex goal, out List<Hex> rout, float heightStep)
+    public bool FindPath(Hex start, Hex goal, GameObject unit, out List<Hex> rout, float heightStep)
     {
         if(start == null || goal == null || start == goal) { rout = null; return false; }
         Dictionary<Hex, Hex> visited;
-        return pathFinder.AStarSearch(this, start, goal, out rout, heightStep, out visited);
+        return pathFinder.AStarSearch(this, start, goal, out rout, heightStep, unit, out visited);
         
     }
 
@@ -84,6 +90,31 @@ public class HexGrid : MonoBehaviour
         }
         hex = null;
         return false;
+    }
+
+    public List<Hex> GetHexesInRange(int range, Hex center)
+    {
+        List<Hex> hexList = new List<Hex>();
+        for(int q = -range; q <= range; q++)
+        {
+            for (int r = -range; r <= range; r++)
+            {
+                for (int s = -range; s <= range; s++)
+                {
+                    if(q + r + s == 0)
+                    {
+                        
+                        if(GetHex(new Vector3(r, q, s), out Hex addition)){
+                            hexList.Add(addition);
+                            Debug.Log("hex added");
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return hexList;
     }
 
     public void RevertHexs()

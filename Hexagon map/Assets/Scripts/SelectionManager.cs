@@ -47,7 +47,10 @@ public class SelectionManager : MonoBehaviour
             }
             else if(result.GetComponentInParent<UnitController>() != null)
             {
-                currentSelection = result;
+                if (result.GetComponentInParent<UnitController>().isPlayerUnit())
+                {
+                    currentSelection = result;
+                }
             }
             else { Debug.Log("not a valid selection"); }
         }
@@ -70,7 +73,7 @@ public class SelectionManager : MonoBehaviour
                     PathFinding aStar = new PathFinding();
                     List<Hex> path;
                     Dictionary<Hex, Hex> visited;
-                    if (aStar.AStarSearch(hexGrid, currentHex, foundHex, out path, .5f, out visited))
+                    if (aStar.AStarSearch(hexGrid, currentHex, foundHex, out path, .5f, null, out visited))
                     {
                         
                         Dictionary<Hex, Hex>.ValueCollection valueCol = visited.Values;
