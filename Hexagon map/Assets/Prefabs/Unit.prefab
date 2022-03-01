@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 96eb8cdbd11561741af31f494a74820c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -147,9 +147,10 @@ MonoBehaviour:
   heightStep: 0.5
   enemyLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   currentHex: {fileID: 0}
   target: {fileID: 0}
+  attackSpeed: 2
 --- !u!114 &3039745322124751306
 MonoBehaviour:
   m_ObjectHideFlags: 0

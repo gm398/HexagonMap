@@ -16,7 +16,7 @@ public class SelectionManager : MonoBehaviour
     [SerializeField] Material testMat;
 
     private Hex currentHex;
-    private GameObject currentSelection;
+    private List<GameObject> currentSelection;
 
     private void Awake()
     {
@@ -24,6 +24,7 @@ public class SelectionManager : MonoBehaviour
         {
             mainCamers = Camera.main;
         }
+        currentSelection = new List<GameObject>();
     }
 
 
@@ -34,7 +35,10 @@ public class SelectionManager : MonoBehaviour
         {
             hexGrid.RevertHexs();//resets all the hexes click states
             currentHex = null;
-            currentSelection = null;
+            if (!(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)))
+            {
+                currentSelection.Clear();
+            }
 
             if (result.GetComponentInParent<Hex>() != null)
             {
@@ -43,13 +47,12 @@ public class SelectionManager : MonoBehaviour
                 Debug.Log("Hex RQS:" + selectedHex.GetHexCoordinates().GetHexCoordsRQS() + " .");
 
                 currentHex = selectedHex;//currently selected hex
-                
             }
             else if(result.GetComponentInParent<UnitController>() != null)
             {
                 if (result.GetComponentInParent<UnitController>().isPlayerUnit())
                 {
-                    currentSelection = result;
+                    currentSelection.Add(result);
                 }
             }
             else { Debug.Log("not a valid selection"); }
@@ -89,9 +92,12 @@ public class SelectionManager : MonoBehaviour
 
                     }
                 }
-                if(currentSelection != null)
+                if (currentSelection != null)
                 {
-                    currentSelection.GetComponentInParent<UnitController>().SetTarget(result.GetComponentInParent<Hex>());
+                    foreach (GameObject selected in currentSelection)
+                    {
+                        selected.GetComponentInParent<UnitController>().SetTarget(result.GetComponentInParent<Hex>());
+                    }
                 }
             }
             else { Debug.Log("not a hex"); }

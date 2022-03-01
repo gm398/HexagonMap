@@ -26,7 +26,8 @@ public class UnitController : MonoBehaviour
         else { hexCoords = this.gameObject.AddComponent<HexCoordinates>(); }
         hexCoords.MoveToGridCords();
         hexGrid = GameObject.FindGameObjectWithTag("Map").GetComponent<HexGrid>();
-        
+       
+
     }
 
     // Update is called once per frame
@@ -62,7 +63,7 @@ public class UnitController : MonoBehaviour
     {
         if(path == null) { return; }
         path.TrimExcess();
-        if (path.Count <= 0) { return; }
+        if (path.Count <= 0) { path = null; return; }
 
         
         if(!(this.gameObject.Equals(path[0].GetOccupant()) || path[0].GetOccupant() == null))
@@ -103,6 +104,34 @@ public class UnitController : MonoBehaviour
     void AimAtTarget()
     {
         GameObject closest = null;
+
+        Collider[] enemys = Physics.OverlapSphere(this.transform.position, 1 + (range * 2), enemyLayers);
+
+        foreach(Collider c in enemys)
+        {
+            if (c.GetComponentInParent<UnitController>() != null)
+            {
+                if (c.GetComponentInParent<UnitController>().GetcurrentHex() != null)
+                {
+                    if (c.GetComponentInParent<UnitController>().GetcurrentHex().DistanceFromHex(currentHex) <= range)
+                    {
+                        if (closest == null) { closest = c.gameObject; }
+                        else if (c.GetComponentInParent<UnitController>().GetcurrentHex().DistanceFromHex(currentHex)
+                            < closest.GetComponentInParent<UnitController>().GetcurrentHex().DistanceFromHex(currentHex))
+                        {
+                            closest = c.gameObject;
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
+        /*
         List<Hex> hexsInRange = hexGrid.GetHexesInRange((int)range, currentHex);
         if (hexsInRange.Count <= 0) { return; }
         foreach (Hex h in hexsInRange)
@@ -123,6 +152,7 @@ public class UnitController : MonoBehaviour
             }
 
         }
+        */
 
 
         if (closest != null)
