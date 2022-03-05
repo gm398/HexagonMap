@@ -126,35 +126,7 @@ public class UnitController : MonoBehaviour
             }
         }
 
-
-
-
-
-
-        /*
-        List<Hex> hexsInRange = hexGrid.GetHexesInRange((int)range, currentHex);
-        if (hexsInRange.Count <= 0) { return; }
-        foreach (Hex h in hexsInRange)
-        {
-            UnitController enemy;
-            if (h.GetOccupant() != null)
-            {
-                if (h.GetOccupant().GetComponent<UnitController>() != null)
-                {
-
-                    enemy = h.GetOccupant().GetComponent<UnitController>();
-                    if (closest == null) { closest = enemy.gameObject; }
-                    else if (h.DistanceFromHex(currentHex) < enemy.GetcurrentHex().DistanceFromHex(currentHex))
-                    {
-                        closest = enemy.gameObject;
-                    }
-                }
-            }
-
-        }
-        */
-
-
+        
         if (closest != null)
         {
             //this.transform.LookAt(closest.transform.position);

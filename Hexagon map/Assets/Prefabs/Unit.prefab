@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 1154892284206815015}
   - component: {fileID: 7495523256469156794}
   - component: {fileID: 3039745322124751306}
+  - component: {fileID: 4168364751516399979}
   m_Layer: 8
   m_Name: Unit
   m_TagString: Untagged
@@ -165,3 +166,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hexCoordinatesRQS: {x: 0, y: 0, z: 0}
   worldCoords: {x: 0, y: 0, z: 0}
+--- !u!114 &4168364751516399979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5205895895043749384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9724b2643182a684b8c23ad6d4738a4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
