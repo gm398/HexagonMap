@@ -6,13 +6,15 @@ public class Health : MonoBehaviour
 {
 
     [SerializeField] float maxHealth = 100;
-    float currentHealth;
+    [SerializeField] float currentHealth;
 
     private void Awake()
     {
         currentHealth = maxHealth;
     }
 
+    [ContextMenu("Damage")]
+    void take5damage() { TakeDamage(20); }
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
@@ -27,4 +29,8 @@ public class Health : MonoBehaviour
         Debug.Log("unit is dead");
         BroadcastMessage("Dead", SendMessageOptions.DontRequireReceiver);
     }
+
+
+    public float GetMaxHealth() { return maxHealth; }
+    public float GetCurrentHealth() { return currentHealth; }
 }
