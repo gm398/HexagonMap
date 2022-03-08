@@ -6,19 +6,18 @@ public class UnitController : MonoBehaviour
 {
     [SerializeField] bool playerUnit;
     [SerializeField] float speed = 5f;
-    [SerializeField] float range = 10f;
     [SerializeField] float heightStep = .5f;
-    [SerializeField] LayerMask enemyLayers;
     HexGrid hexGrid;
     HexCoordinates hexCoords;
     [SerializeField] Hex currentHex;
     [SerializeField] GameObject target;
+
+    [SerializeField] LayerMask enemyLayers;
     private Hex targetHex;
     private bool newTarget = false;
     List<Hex> path = new List<Hex>();
 
-    [SerializeField] float attackSpeed = 2;
-    bool canAttack = true;
+    
     
     private void Awake()
     {
@@ -40,12 +39,7 @@ public class UnitController : MonoBehaviour
         CheckForTarget();
         GoToTarget();
 
-        if (canAttack)
-        {
-            AimAtTarget();
-            canAttack = false;
-            Invoke("resetAttack", 1 / attackSpeed);
-        }
+       
         
 
     }
@@ -64,88 +58,85 @@ public class UnitController : MonoBehaviour
         if(path == null) { return; }
         path.TrimExcess();
         if (path.Count <= 0) { path = null; return; }
-
-        
+       
         if(!(this.gameObject.Equals(path[0].GetOccupant()) || path[0].GetOccupant() == null))
         {
             UpdatePath();
             return;
         }
+        else
+        {
+            path[0].SetOccupent(this.gameObject);
+            currentHex.SetOccupent(null);
+        }
         if (Vector3.Distance(transform.position, path[0].GetTargetPoint()) > .05)
         {
-            transform.Translate(((path[0].GetTargetPoint() - transform.position).normalized
-                * speed
-                * Time.deltaTime)
-                / path[0].GetMoveDificulty());
+            MoveToHex(path[0]);
         }
         else
         {
+
             currentHex.SetOccupent(null);
             hexCoords.MoveToGridCords();
             hexGrid.GetHex(hexCoords.GetHexCoordsRQS(), out currentHex);
             currentHex.SetOccupent(this.gameObject);
+
             if (path.Count > 0)
             {
                 path.RemoveAt(0);
                 path.TrimExcess();
             }
+            else
+            {
+                targetHex = null;
+            }
         }
          
     }
 
+    void MoveToHex(Hex destination)
+    {
+        hexCoords.ConvertToHexCords();
+        Hex currentHex;
+        if (!hexGrid.GetHex(hexCoords.GetHexCoordsRQS(), out currentHex)){
+            currentHex = destination; //not perfect
+        }
+        transform.Translate(((destination.GetTargetPoint() - transform.position).normalized
+            * speed
+            * Time.deltaTime)
+            / currentHex.GetMoveDificulty());
+        
+    }
+
     void UpdatePath()
     {
-        if(hexGrid.FindPath(currentHex, targetHex, this.gameObject, out path, heightStep))
-        {
-
-        }
+        hexGrid.FindPath(currentHex, targetHex, this.gameObject, out path, heightStep);
     }
 
-    void AimAtTarget()
-    {
-        GameObject closest = null;
-
-        Collider[] enemys = Physics.OverlapSphere(this.transform.position, 1 + (range * 2), enemyLayers);
-
-        foreach(Collider c in enemys)
-        {
-            if (c.GetComponentInParent<UnitController>() != null)
-            {
-                if (c.GetComponentInParent<UnitController>().GetcurrentHex() != null)
-                {
-                    if (c.GetComponentInParent<UnitController>().GetcurrentHex().DistanceFromHex(currentHex) <= range)
-                    {
-                        if (closest == null) { closest = c.gameObject; }
-                        else if (c.GetComponentInParent<UnitController>().GetcurrentHex().DistanceFromHex(currentHex)
-                            < closest.GetComponentInParent<UnitController>().GetcurrentHex().DistanceFromHex(currentHex))
-                        {
-                            closest = c.gameObject;
-                        }
-                    }
-                }
-            }
-        }
-
-        
-        if (closest != null)
-        {
-            //this.transform.LookAt(closest.transform.position);
-            Debug.Log("looking at a target");
-        } //else {Debug.Log("no closest"); }
-    }
+    
 
     public void SetTarget(Hex hex)
     {
         targetHex = hex;
         newTarget = true;
     }
-
-    void resetAttack()
+    public void SetTarget(GameObject enemy)
     {
-        canAttack = true;
+        hexGrid.GetHex(enemy.GetComponentInParent<HexCoordinates>().GetHexCoordsRQS(), out targetHex);
+        hexGrid.FindPath(currentHex, targetHex, this.gameObject, out path, heightStep, enemyLayers);
+    }
+
+
+
+    public void Dead()
+    {
+        Debug.Log("unit is dead");
+        currentHex.SetOccupent(null);
+        this.gameObject.SetActive(false);
     }
 
     public Hex GetcurrentHex() { return currentHex; }
     public bool isPlayerUnit() { return playerUnit; }
+    public LayerMask GetEnemyLayers() { return enemyLayers; }
 
 }

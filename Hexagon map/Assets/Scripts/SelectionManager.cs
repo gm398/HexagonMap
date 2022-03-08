@@ -76,7 +76,7 @@ public class SelectionManager : MonoBehaviour
                     PathFinding aStar = new PathFinding();
                     List<Hex> path;
                     Dictionary<Hex, Hex> visited;
-                    if (aStar.AStarSearch(hexGrid, currentHex, foundHex, out path, .5f, null, out visited))
+                    if (aStar.AStarSearch(hexGrid, currentHex, foundHex, out path, .5f, null, out visited, -1))
                     {
                         
                         Dictionary<Hex, Hex>.ValueCollection valueCol = visited.Values;
@@ -92,15 +92,21 @@ public class SelectionManager : MonoBehaviour
 
                     }
                 }
-                if (currentSelection != null)
+            }
+            else { Debug.Log("not a hex"); }
+            if (currentSelection != null)
                 {
                     foreach (GameObject selected in currentSelection)
                     {
-                        selected.GetComponentInParent<UnitController>().SetTarget(result.GetComponentInParent<Hex>());
+                        if (selected != null)
+                        {
+                            Hex targetHex;
+                            hexGrid.GetHex(result.GetComponentInParent<HexCoordinates>().GetHexCoordsRQS(), out targetHex);
+                            selected.GetComponentInParent<UnitController>().SetTarget(targetHex);
+                        }
                     }
                 }
-            }
-            else { Debug.Log("not a hex"); }
+            
         }
     }
 

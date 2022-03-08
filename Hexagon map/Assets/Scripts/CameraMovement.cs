@@ -6,13 +6,16 @@ public class CameraMovement : MonoBehaviour
 {
     [SerializeField] Camera cam;
     [SerializeField] float moveSpeed = 10f;
+    [SerializeField] float panSpeed = 100f;
     [SerializeField] float zoomSpeed = 10f;
     [SerializeField] float maxZoom = 1f, minZoom = 10f;
     private float currentZoom;
+    private Vector3 rotationPoint;
 
     private void Awake()
     {
         currentZoom = cam.orthographicSize;
+        SetRotationPoint();
     }
 
     // Update is called once per frame
@@ -23,17 +26,26 @@ public class CameraMovement : MonoBehaviour
 
     void GetInputs()
     {
-        
-        if (Input.GetKey("mouse 2"))
+        Cursor.lockState = CursorLockMode.Confined;
+        float mouseX = -Input.GetAxis("Mouse X");
+        float mouseY = -Input.GetAxis("Mouse Y");
+        bool middleMouse = Input.GetKey("mouse 2");
+        bool rightClick = Input.GetKey("mouse 1");
+        if (!rightClick && middleMouse)
         {
             Cursor.lockState = CursorLockMode.Locked;
-            float mouseX = -Input.GetAxis("Mouse X") * moveSpeed * Time.deltaTime;
-            float mouseY = -Input.GetAxis("Mouse Y") * moveSpeed * Time.deltaTime;
-            this.transform.Translate(new Vector3(mouseX, 0, mouseY), Space.World);
+            Vector3 direction = transform.right * mouseX + transform.forward * mouseY;
+            direction.y = 0;
+            
+            this.transform.Translate(direction * moveSpeed * Time.deltaTime, Space.World);
         }
-        else
+        else if(rightClick && middleMouse)
         {
-            Cursor.lockState = CursorLockMode.Confined;
+            SetRotationPoint();
+            Cursor.lockState = CursorLockMode.Locked;
+            mouseX = Input.GetAxis("Mouse X") * panSpeed * Time.deltaTime;//uses panSpeed rather than moveSpeed
+            //this.transform.Rotate(new Vector3(0, mouseX, 0), Space.World);
+            this.transform.RotateAround(rotationPoint, Vector3.up, mouseX);
         }
 
 
@@ -44,5 +56,18 @@ public class CameraMovement : MonoBehaviour
         if(currentZoom < maxZoom) { currentZoom = maxZoom; }
         else if(currentZoom > minZoom) { currentZoom = minZoom; }
         cam.orthographicSize = currentZoom;
+    }
+
+
+    void SetRotationPoint()
+    {
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, 50))
+        {
+            rotationPoint = hit.transform.position;
+        }
+        else
+        {
+            rotationPoint = this.transform.position;
+        }
     }
 }

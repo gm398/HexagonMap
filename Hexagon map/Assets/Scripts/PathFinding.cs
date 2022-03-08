@@ -8,7 +8,7 @@ public class PathFinding
     
 
     //the A* search algorithm
-    public bool AStarSearch(HexGrid hexGrid, Hex start, Hex goal, out List<Hex> rout, float heightStep, GameObject unit, out Dictionary<Hex, Hex> visited)
+    public bool AStarSearch(HexGrid hexGrid, Hex start, Hex goal, out List<Hex> rout, float heightStep, GameObject unit, out Dictionary<Hex, Hex> visited, LayerMask enemyLayers)
     {
         Dictionary<Hex, Hex> VisitedHexs = new Dictionary<Hex, Hex>();
         Dictionary<Hex, Hex> cameFrom = new Dictionary<Hex, Hex>();
@@ -32,7 +32,14 @@ public class PathFinding
             foreach (Hex nextHex in hexGrid.GetNeighbours(currentHex))
             {
                 float heightDiff = Mathf.Abs(nextHex.GetHexCoordinates().GetHeight() - currentHex.GetHexCoordinates().GetHeight());
-                if (nextHex.IsTraversable() && heightDiff <= heightStep && (unit == null || nextHex.GetOccupant() == null || nextHex.GetOccupant().Equals(unit) ))
+                if (nextHex.IsTraversable() 
+                    && heightDiff <= heightStep 
+                    && (unit == null 
+                        || nextHex.GetOccupant() == null 
+                        || nextHex.GetOccupant().Equals(unit)
+                        //|| (enemyLayers == (enemyLayers | (1 << nextHex.GetOccupant().layer)))
+                        )
+                    ) 
                 {
                     float newCost = costSoFar[currentHex] + nextHex.GetMoveDificulty();
 

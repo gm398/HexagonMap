@@ -26,7 +26,7 @@ public class Health : MonoBehaviour
 
     public void Die()
     {
-        Debug.Log("unit is dead");
+        
         BroadcastMessage("Dead", SendMessageOptions.DontRequireReceiver);
     }
 

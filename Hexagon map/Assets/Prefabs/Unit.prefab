@@ -106,7 +106,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3760415184038719882}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Healthbar holder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -139,6 +139,7 @@ GameObject:
   - component: {fileID: 7495523256469156794}
   - component: {fileID: 3039745322124751306}
   - component: {fileID: 4168364751516399979}
+  - component: {fileID: 8124406457484712674}
   m_Layer: 8
   m_Name: Unit
   m_TagString: Untagged
@@ -183,7 +184,6 @@ MonoBehaviour:
     m_Bits: 512
   currentHex: {fileID: 0}
   target: {fileID: 0}
-  attackSpeed: 2
 --- !u!114 &3039745322124751306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,6 +212,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 100
+--- !u!114 &8124406457484712674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5205895895043749384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 567b9346c01aa1248a4d486a52e50606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: 1
+  attackSpeed: 1
+  damage: 10
+  enemyLayers:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1001 &5103181609644569247
 PrefabInstance:
   m_ObjectHideFlags: 0

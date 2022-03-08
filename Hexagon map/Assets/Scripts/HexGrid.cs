@@ -38,9 +38,16 @@ public class HexGrid : MonoBehaviour
     {
         if(start == null || goal == null || start == goal) { rout = null; return false; }
         Dictionary<Hex, Hex> visited;
-        return pathFinder.AStarSearch(this, start, goal, out rout, heightStep, unit, out visited);
-        
+        return pathFinder.AStarSearch(this, start, goal, out rout, heightStep, unit, out visited, -1);
     }
+    public bool FindPath(Hex start, Hex goal, GameObject unit, out List<Hex> rout, float heightStep, LayerMask enemyLayers)
+    {
+        if (start == null || goal == null || start == goal) { rout = null; return false; }
+        Dictionary<Hex, Hex> visited;
+        return pathFinder.AStarSearch(this, start, goal, out rout, heightStep, unit, out visited, enemyLayers);
+    }
+
+
 
     public List<Hex> GetNeighbours(Hex startHex)
     {
