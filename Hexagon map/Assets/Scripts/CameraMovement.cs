@@ -41,7 +41,10 @@ public class CameraMovement : MonoBehaviour
         }
         else if(rightClick && middleMouse)
         {
-            SetRotationPoint();
+            if (Input.GetKeyDown("mouse 1"))
+            {
+                SetRotationPoint();
+            }
             Cursor.lockState = CursorLockMode.Locked;
             mouseX = Input.GetAxis("Mouse X") * panSpeed * Time.deltaTime;//uses panSpeed rather than moveSpeed
             //this.transform.Rotate(new Vector3(0, mouseX, 0), Space.World);

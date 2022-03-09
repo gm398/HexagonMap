@@ -63,53 +63,91 @@ public class SelectionManager : MonoBehaviour
         GameObject result;
         if (FindTarget(mousePosition, out result))
         {
-            if (result.GetComponentInParent<Hex>() != null)
-            {
-
-                Hex foundHex = result.GetComponentInParent<Hex>();
-                if (currentHex != null)
+            //DisplayPath(result);
+            if (currentSelection != null)
                 {
-                    hexGrid.RevertHexs();
-                    currentHex.SetNewMaterial(selectionMaterial);
-                    Debug.Log("Distance = " + currentHex.DistanceFromHex(foundHex) + ".");
-                    //foundHex.SetNewMaterial(selectionMaterial);
-                    PathFinding aStar = new PathFinding();
-                    List<Hex> path;
-                    Dictionary<Hex, Hex> visited;
-                    if (aStar.AStarSearch(hexGrid, currentHex, foundHex, out path, .5f, null, out visited, -1))
+                UnitController enemyController = result.GetComponentInParent<UnitController>();
+                Hex targetHex = result.GetComponentInParent<Hex>();
+                if(targetHex == null) { hexGrid.GetHex(result.GetComponentInParent<HexCoordinates>().GetHexCoordsRQS(), out targetHex); }
+                foreach (GameObject selected in currentSelection)
+                {
+                    if (selected != null)
                     {
+                        UnitController controller = selected.GetComponentInParent<UnitController>();
+                        if (enemyController != null)
+                        {
+                            controller.SetTargetEnemy(result);
+                        }
+                        else if(targetHex != null)
+                        {
+                            int targetLayer = -1;
+                            GameObject enemy = targetHex.GetOccupant();
+                            if (enemy != null) { targetLayer = enemy.layer; }
+                            if (controller.IsEnemy(targetLayer)){
+                                controller.SetTargetEnemy(result);
+                            }
+                            else
+                            { 
+                                controller.SetTargetHex(targetHex);
+                            }
+                        }
                         
-                        Dictionary<Hex, Hex>.ValueCollection valueCol = visited.Values;
-                        foreach(Hex hex in valueCol)
+                    /*
+                        Hex targetHex;
+                        hexGrid.GetHex(result.GetComponentInParent<HexCoordinates>().GetHexCoordsRQS(), out targetHex);
+                        GameObject target = targetHex.GetOccupant();
+                        if (target != null)
                         {
-                            hex.SetNewMaterial(testMat);
+                            if (selected.GetComponentInParent<UnitController>().IsEnemy(target.layer))
+                            {
+                                selected.GetComponentInParent<UnitController>().SetTargetEnemy(target);
+                            }
                         }
-                        foreach (Hex hex in path)
+                        else
                         {
-                            currentHex.SetNewMaterial(selectionMaterial);
-                            hex.SetNewMaterial(selectionMaterial);
-                        }
-
+                            selected.GetComponentInParent<UnitController>().SetTargetHex(targetHex);
+                        }*/
                     }
                 }
             }
-            else { Debug.Log("not a hex"); }
-            if (currentSelection != null)
-                {
-                    foreach (GameObject selected in currentSelection)
-                    {
-                        if (selected != null)
-                        {
-                            Hex targetHex;
-                            hexGrid.GetHex(result.GetComponentInParent<HexCoordinates>().GetHexCoordsRQS(), out targetHex);
-                            selected.GetComponentInParent<UnitController>().SetTarget(targetHex);
-                        }
-                    }
-                }
             
         }
     }
 
+    //used to display how the pathfinding is workingon a hexgrid
+    private void DisplayPath(GameObject result)
+    {
+        if (result.GetComponentInParent<Hex>() != null)
+        {
+            Hex foundHex = result.GetComponentInParent<Hex>();
+            if (currentHex != null)
+            {
+                hexGrid.RevertHexs();
+                currentHex.SetNewMaterial(selectionMaterial);
+                Debug.Log("Distance = " + currentHex.DistanceFromHex(foundHex) + ".");
+                //foundHex.SetNewMaterial(selectionMaterial);
+                PathFinding aStar = new PathFinding();
+                List<Hex> path;
+                Dictionary<Hex, Hex> visited;
+                if (aStar.AStarSearch(hexGrid, currentHex, foundHex, out path, .5f, null, out visited, -1, 0))
+                {
+
+                    Dictionary<Hex, Hex>.ValueCollection valueCol = visited.Values;
+                    foreach (Hex hex in valueCol)
+                    {
+                        hex.SetNewMaterial(testMat);
+                    }
+                    foreach (Hex hex in path)
+                    {
+                        currentHex.SetNewMaterial(selectionMaterial);
+                        hex.SetNewMaterial(selectionMaterial);
+                    }
+
+                }
+            }
+        }
+        else { Debug.Log("not a hex"); }
+    }
     private bool FindTarget(Vector3 mousePosition, out GameObject result)
     {
         RaycastHit hit;Ray ray = mainCamers.ScreenPointToRay(mousePosition);

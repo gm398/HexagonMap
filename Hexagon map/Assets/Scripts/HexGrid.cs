@@ -38,14 +38,16 @@ public class HexGrid : MonoBehaviour
     {
         if(start == null || goal == null || start == goal) { rout = null; return false; }
         Dictionary<Hex, Hex> visited;
-        return pathFinder.AStarSearch(this, start, goal, out rout, heightStep, unit, out visited, -1);
+        return pathFinder.AStarSearch(this, start, goal, out rout, heightStep, unit, out visited, -1, 0);
     }
-    public bool FindPath(Hex start, Hex goal, GameObject unit, out List<Hex> rout, float heightStep, LayerMask enemyLayers)
+    
+    public bool FindPath(Hex start, Hex goal, GameObject unit, out List<Hex> rout, float heightStep, LayerMask enemyLayers, int range)
     {
         if (start == null || goal == null || start == goal) { rout = null; return false; }
         Dictionary<Hex, Hex> visited;
-        return pathFinder.AStarSearch(this, start, goal, out rout, heightStep, unit, out visited, enemyLayers);
+        return pathFinder.AStarSearch(this, start, goal, out rout, heightStep, unit, out visited, enemyLayers, range);
     }
+    
 
 
 
@@ -149,6 +151,7 @@ public class HexGrid : MonoBehaviour
                 {
                     //logs any hexs that are in the same spot, not counting height
                     Vector3 hexLog = hex.GetHexCoordinates().GetHexCoordsRQS();
+                    /*
                     Debug.Log("hexDictonary already contains hex RQS: "
                         + hexLog.x + " "
                         + hexLog.y + " "
@@ -157,6 +160,7 @@ public class HexGrid : MonoBehaviour
                         + hex.transform.position.x + " "
                         + hex.transform.position.y + " "
                         + hex.transform.position.z + ". ");
+                        */
                     hex.gameObject.SetActive(false);
                 }
             }

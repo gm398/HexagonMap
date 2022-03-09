@@ -8,7 +8,7 @@ public class PathFinding
     
 
     //the A* search algorithm
-    public bool AStarSearch(HexGrid hexGrid, Hex start, Hex goal, out List<Hex> rout, float heightStep, GameObject unit, out Dictionary<Hex, Hex> visited, LayerMask enemyLayers)
+    public bool AStarSearch(HexGrid hexGrid, Hex start, Hex goal, out List<Hex> rout, float heightStep, GameObject unit, out Dictionary<Hex, Hex> visited, LayerMask enemyLayers, int range)
     {
         Dictionary<Hex, Hex> VisitedHexs = new Dictionary<Hex, Hex>();
         Dictionary<Hex, Hex> cameFrom = new Dictionary<Hex, Hex>();
@@ -27,7 +27,9 @@ public class PathFinding
             PriorityHex currentPrioHex = hexQueue.GetNext();
             Hex currentHex = currentPrioHex.hex;
             
-            if (currentHex == goal) { Debug.Log("reached goal"); break; }
+            if (currentHex == goal || goal.DistanceFromHex(currentHex) <= range) {
+               // Debug.Log("reached goal");
+                break; }
 
             foreach (Hex nextHex in hexGrid.GetNeighbours(currentHex))
             {
@@ -37,7 +39,7 @@ public class PathFinding
                     && (unit == null 
                         || nextHex.GetOccupant() == null 
                         || nextHex.GetOccupant().Equals(unit)
-                        //|| (enemyLayers == (enemyLayers | (1 << nextHex.GetOccupant().layer)))
+                        || (enemyLayers == (enemyLayers & (1 << nextHex.GetOccupant().layer)))
                         )
                     ) 
                 {
@@ -61,7 +63,7 @@ public class PathFinding
             
 
         }
-        Debug.Log("a* looped: " + loopCount + " times");
+        //Debug.Log("a* looped: " + loopCount + " times");
         visited = VisitedHexs;
         //if the goal is unreachable the rout will be null and false will be returned 
         if (!VisitedHexs.ContainsKey(goal)) { Debug.Log("No path available"); rout = null; return false; }

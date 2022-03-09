@@ -9,12 +9,11 @@ public class UnitController : MonoBehaviour
     [SerializeField] float heightStep = .5f;
     HexGrid hexGrid;
     HexCoordinates hexCoords;
+    UnitCombatController combatController;
     [SerializeField] Hex currentHex;
-    [SerializeField] GameObject target;
 
     [SerializeField] LayerMask enemyLayers;
     private Hex targetHex;
-    private bool newTarget = false;
     List<Hex> path = new List<Hex>();
 
     
@@ -25,6 +24,7 @@ public class UnitController : MonoBehaviour
         else { hexCoords = this.gameObject.AddComponent<HexCoordinates>(); }
         hexCoords.MoveToGridCords();
         hexGrid = GameObject.FindGameObjectWithTag("Map").GetComponent<HexGrid>();
+        combatController = this.GetComponent<UnitCombatController>();
        
 
     }
@@ -36,7 +36,6 @@ public class UnitController : MonoBehaviour
             hexGrid.GetHex(hexCoords.GetHexCoordsRQS(), out currentHex);
             currentHex.SetOccupent(this.gameObject);
         }
-        CheckForTarget();
         GoToTarget();
 
        
@@ -44,15 +43,7 @@ public class UnitController : MonoBehaviour
 
     }
 
-    void CheckForTarget()
-    {
-        if (newTarget)
-        {
-            UpdatePath();
-            newTarget = false;
-        }
-
-    }
+   
     void GoToTarget()
     {
         if(path == null) { return; }
@@ -61,6 +52,13 @@ public class UnitController : MonoBehaviour
        
         if(!(this.gameObject.Equals(path[0].GetOccupant()) || path[0].GetOccupant() == null))
         {
+            GameObject target = null;
+            if(combatController != null) { target = combatController.GetTarget(); }
+            if (path[0].GetOccupant().Equals(target)) {
+                targetHex = null;
+                path = null;
+                return;
+            }
             UpdatePath();
             return;
         }
@@ -89,11 +87,12 @@ public class UnitController : MonoBehaviour
             else
             {
                 targetHex = null;
+                path = null;
             }
         }
          
     }
-
+    
     void MoveToHex(Hex destination)
     {
         hexCoords.ConvertToHexCords();
@@ -110,20 +109,59 @@ public class UnitController : MonoBehaviour
 
     void UpdatePath()
     {
-        hexGrid.FindPath(currentHex, targetHex, this.gameObject, out path, heightStep);
+        
+        List<Hex> temp;
+        if (hexGrid.FindPath(currentHex, targetHex, this.gameObject, out temp, heightStep))
+        {
+            path = temp;
+        }
+        else
+        {
+            foreach (Hex h in hexGrid.GetNeighbours(targetHex))
+            {
+                if (h.GetOccupant() == null)
+                {
+                    if (hexGrid.FindPath(currentHex, h, this.gameObject, out temp, heightStep))
+                    {
+                        path = temp;
+                        return;
+                    }
+                }
+            }
+            targetHex = null;
+            path = null;
+        }
     }
 
-    
-
-    public void SetTarget(Hex hex)
+  
+    public void SetTargetHex(Hex hex)
     {
         targetHex = hex;
-        newTarget = true;
+        if (combatController != null) { combatController.SetTarget(null); }
+        UpdatePath();
     }
-    public void SetTarget(GameObject enemy)
+    public void SetTargetEnemy(GameObject enemy)
     {
         hexGrid.GetHex(enemy.GetComponentInParent<HexCoordinates>().GetHexCoordsRQS(), out targetHex);
-        hexGrid.FindPath(currentHex, targetHex, this.gameObject, out path, heightStep, enemyLayers);
+        targetHex = enemy.GetComponentInParent<UnitController>().GetcurrentHex();
+        if(enemyLayers != (enemyLayers | (1 << enemy.layer)) && targetHex != null) { SetTargetHex(targetHex); }
+        List<Hex> temp;
+        Debug.Log("target is an enemy");
+        bool validTarget = false;
+        if(combatController != null) { validTarget = combatController.SetTarget(enemy); }
+
+        if (validTarget)
+        {
+            if (combatController.EnemyInRange()) {
+                return;
+            }
+        }
+
+        if (hexGrid.FindPath(currentHex, targetHex, this.gameObject, out temp, heightStep, enemyLayers, combatController.GetRange()))
+        {
+            path = temp;
+        }
+       
     }
 
 
@@ -138,5 +176,7 @@ public class UnitController : MonoBehaviour
     public Hex GetcurrentHex() { return currentHex; }
     public bool isPlayerUnit() { return playerUnit; }
     public LayerMask GetEnemyLayers() { return enemyLayers; }
+
+    public bool IsEnemy(int layer) { return enemyLayers == (enemyLayers | (1 << layer)); }
 
 }

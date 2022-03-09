@@ -10,6 +10,7 @@ public class UnitCombatController : MonoBehaviour
     [SerializeField] float damage = 10;
     LayerMask enemyLayers;
     bool canAttack = true;
+    GameObject target;
 
     UnitController controller;
 
@@ -17,6 +18,7 @@ public class UnitCombatController : MonoBehaviour
     {
         controller = this.gameObject.GetComponent<UnitController>();
         enemyLayers = controller.GetEnemyLayers();
+        if(range < 1) { range = 1; }
     }
 
     // Update is called once per frame
@@ -31,34 +33,47 @@ public class UnitCombatController : MonoBehaviour
 
     void AimAtTarget()
     {
-        GameObject closest = null;
-
-        Collider[] enemys = Physics.OverlapSphere(this.transform.position, 1 + (range * 2), enemyLayers);
         Hex currentHex = controller.GetcurrentHex();
-        foreach (Collider c in enemys)
+        GameObject closest = null;
+        bool targetInRange = false;
+        if (target != null)
         {
-            UnitController enemyController = c.GetComponentInParent<UnitController>();
-            if (enemyController != null)
+            targetInRange = target.GetComponentInParent<UnitController>().GetcurrentHex().DistanceFromHex(currentHex) <= range;
+        }
+        if (!targetInRange)
+        {
+            Collider[] enemys = Physics.OverlapSphere(this.transform.position, 1 + (range * 2), enemyLayers);
+
+            foreach (Collider c in enemys)
             {
-                if (enemyController.GetcurrentHex() != null)
+                UnitController enemyController = c.GetComponentInParent<UnitController>();
+                if (enemyController != null)
                 {
-                    if (enemyController.GetcurrentHex().DistanceFromHex(currentHex) <= range)
+                    if (enemyController.GetcurrentHex() != null)
                     {
-                        if (closest == null) { closest = c.gameObject; }
-                        else if (enemyController.GetcurrentHex().DistanceFromHex(currentHex)
-                            < closest.GetComponentInParent<UnitController>().GetcurrentHex().DistanceFromHex(currentHex))
+                        if (enemyController.GetcurrentHex().DistanceFromHex(currentHex) <= range)
                         {
-                            closest = c.gameObject;
+                            if (closest == null) { closest = c.gameObject; }
+                            else if (enemyController.GetcurrentHex().DistanceFromHex(currentHex)
+                                < closest.GetComponentInParent<UnitController>().GetcurrentHex().DistanceFromHex(currentHex))
+                            {
+                                closest = c.gameObject;
+                            }
                         }
                     }
                 }
             }
         }
+        else {
+            if (enemyLayers == (enemyLayers | (1 << target.layer)))
+            {
+                closest = target;
+            }
+        }
         
         if (closest != null)
         {
-            //this.transform.LookAt(closest.transform.position);
-            Debug.Log("looking at a target");
+            //Debug.Log("looking at a target");
             Health enemyHealth = closest.GetComponentInParent<Health>();
             if(enemyHealth != null)
             {
@@ -76,4 +91,27 @@ public class UnitCombatController : MonoBehaviour
         canAttack = true;
     }
 
+    public bool SetTarget(GameObject newTarget) {
+        if(newTarget == null) { target = null; return false; }
+        Health h = newTarget.GetComponentInParent<Health>();
+        if(h != null) { target = newTarget; return true; }
+        else { Debug.Log("Invalid target"); return false; }
+    }
+
+
+    public GameObject GetTarget() { return target; }
+    public int GetRange() { return range; }
+    public bool EnemyInRange()
+    {
+        Hex currentHex = controller.GetcurrentHex();
+        UnitController enemyController = target.GetComponentInParent<UnitController>();
+        if (enemyController != null)
+        {
+            if (enemyController.GetcurrentHex() != null)
+            {
+                return enemyController.GetcurrentHex().DistanceFromHex(currentHex) <= range;
+            }
+        }
+        return false;
+    }
 }

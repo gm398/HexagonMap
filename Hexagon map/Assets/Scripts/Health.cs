@@ -7,6 +7,7 @@ public class Health : MonoBehaviour
 
     [SerializeField] float maxHealth = 100;
     [SerializeField] float currentHealth;
+    [SerializeField] float armor = 0;
 
     private void Awake()
     {
@@ -15,8 +16,11 @@ public class Health : MonoBehaviour
 
     [ContextMenu("Damage")]
     void take5damage() { TakeDamage(20); }
+
     public void TakeDamage(float damage)
     {
+        damage -= armor;
+        if(damage < 1) { damage = 1; }
         currentHealth -= damage;
         if(currentHealth <= 0) { currentHealth = 0; Die(); }
         if(currentHealth > maxHealth) { currentHealth = maxHealth; }
