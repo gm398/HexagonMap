@@ -6,22 +6,29 @@ using UnityEngine;
 public class PathFinding
 {
     
-
     //the A* search algorithm
     public bool AStarSearch(HexGrid hexGrid, Hex start, Hex goal, out List<Hex> rout, float heightStep, GameObject unit, out Dictionary<Hex, Hex> visited, LayerMask enemyLayers, int range)
     {
+        
         Dictionary<Hex, Hex> VisitedHexs = new Dictionary<Hex, Hex>();
         Dictionary<Hex, Hex> cameFrom = new Dictionary<Hex, Hex>();
         Dictionary<Hex, float> costSoFar = new Dictionary<Hex, float>();
-
         HexQueue hexQueue = new HexQueue();
+
+        UnitController controller = unit.GetComponentInParent<UnitController>();
+        bool canFly = controller.CanFly();
 
         VisitedHexs.Add(start, start);
         cameFrom.Add(start, start);
         costSoFar.Add(start, 0);
         hexQueue.Add(start, 0);
         int loopCount = 0;
-        while (!hexQueue.IsEmpty())
+        bool doable = canFly;
+        if (!canFly)
+        {
+            doable = ChooseBetterGoal(hexGrid, start, out goal, goal, unit, 5);
+        }
+        while (!hexQueue.IsEmpty() && doable)
         {
             loopCount++;
             PriorityHex currentPrioHex = hexQueue.GetNext();
@@ -35,7 +42,7 @@ public class PathFinding
             foreach (Hex nextHex in hexGrid.GetNeighbours(currentHex))
             {
                 float heightDiff = Mathf.Abs(nextHex.GetHexCoordinates().GetHeight() - currentHex.GetHexCoordinates().GetHeight());
-                if (nextHex.IsTraversable() 
+                if ((nextHex.IsTraversable() || canFly) 
                     && heightDiff <= heightStep 
                     && (unit == null 
                         || nextHex.GetOccupant() == null 
@@ -62,7 +69,6 @@ public class PathFinding
                 }
             }
             
-
         }
         //Debug.Log("a* looped: " + loopCount + " times");
         visited = VisitedHexs;
@@ -84,7 +90,48 @@ public class PathFinding
         path.Reverse();
         return path;
     }
+    
 
+
+    // if the goal is not traversable try to find a traversable hex in its neighbours to reduce hexs checked
+    private bool ChooseBetterGoal(HexGrid hexGrid, Hex start, out Hex newGoal, Hex goal, GameObject unit, int attempts)
+    {
+        if (start == goal) { newGoal = goal; return true; }
+        float distance = start.DistanceFromHex(goal);
+        bool newHexFound = false;
+        bool sucess = false;
+        List<Hex> neighbours = hexGrid.GetNeighbours(goal);
+        if (!goal.IsTraversable())
+        {
+            float dis;
+            foreach (Hex h in neighbours)
+            {
+                dis = start.DistanceFromHex(h);
+                if (!newHexFound) { if (h.IsTraversable() && !unit.Equals(h.GetOccupant())) { goal = h; newHexFound = true; } }
+                else if (h.IsTraversable() && dis < distance && !unit.Equals(h.GetOccupant()))
+                {
+                    distance = dis;
+                    goal = h;
+                }
+            }
+            sucess = newHexFound;
+            if (!newHexFound && attempts > 0)
+            {
+                foreach (Hex h in neighbours)
+                {
+                    dis = start.DistanceFromHex(h);
+                    if (dis < distance) { goal = h; newHexFound = true; }
+                }
+                if (newHexFound)
+                {
+                    sucess = ChooseBetterGoal(hexGrid, start, out goal, goal, unit, attempts - 1);
+                }
+            }
+        }
+        else { sucess = true; }
+        newGoal = goal;
+        return sucess;
+    }
 
     private class PriorityHex
     {

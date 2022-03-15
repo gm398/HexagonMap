@@ -7,6 +7,7 @@ public class UnitController : MonoBehaviour
     [SerializeField] bool playerUnit;
     [SerializeField] float speed = 5f;
     [SerializeField] float heightStep = .5f;
+    [SerializeField] bool flyingUnit = false;
     HexGrid hexGrid;
     HexCoordinates hexCoords;
     UnitCombatController combatController;
@@ -76,6 +77,9 @@ public class UnitController : MonoBehaviour
 
             currentHex.SetOccupent(null);
             hexCoords.MoveToGridCords();
+            Vector3 pos = transform.position;
+            pos.y = path[0].GetTargetPoint().y;
+            transform.position = pos;
             hexGrid.GetHex(hexCoords.GetHexCoordsRQS(), out currentHex);
             currentHex.SetOccupent(this.gameObject);
 
@@ -177,6 +181,7 @@ public class UnitController : MonoBehaviour
     public bool isPlayerUnit() { return playerUnit; }
     public LayerMask GetEnemyLayers() { return enemyLayers; }
 
-    public bool IsEnemy(int layer) { return enemyLayers == (enemyLayers | (1 << layer)); }
+    public bool IsEnemy(int layer) { return enemyLayers == (enemyLayers & (1 << layer)); }
+    public bool CanFly() { return flyingUnit; }
 
 }

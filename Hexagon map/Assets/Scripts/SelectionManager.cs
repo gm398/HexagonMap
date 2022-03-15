@@ -73,24 +73,27 @@ public class SelectionManager : MonoBehaviour
                 {
                     if (selected != null)
                     {
+                       
                         UnitController controller = selected.GetComponentInParent<UnitController>();
                         if (enemyController != null)
                         {
                             controller.SetTargetEnemy(result);
                         }
-                        else if(targetHex != null)
+                        else if (targetHex != null)
                         {
                             int targetLayer = -1;
                             GameObject enemy = targetHex.GetOccupant();
                             if (enemy != null) { targetLayer = enemy.layer; }
-                            if (controller.IsEnemy(targetLayer)){
+                            if (controller.IsEnemy(targetLayer))
+                            {
                                 controller.SetTargetEnemy(result);
                             }
                             else
-                            { 
+                            {
                                 controller.SetTargetHex(targetHex);
                             }
                         }
+                        
                         
                     /*
                         Hex targetHex;

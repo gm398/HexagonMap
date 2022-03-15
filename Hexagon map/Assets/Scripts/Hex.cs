@@ -14,7 +14,7 @@ public class Hex : MonoBehaviour
     [SerializeField] float moveDificulty = 1;
     [SerializeField] Transform targetPoint;
 
-    private bool isOcupied = false;
+    private bool isOccupied = false;
     private GameObject occupant = null;
     private Material origionalMaterial;
     private Material newMaterial;
@@ -58,9 +58,19 @@ public class Hex : MonoBehaviour
     public HexCoordinates GetHexCoordinates() { return hexCoords; }
     public float GetMoveDificulty() { return moveDificulty; }
     public Vector3 GetTargetPoint() { return targetPoint.position; }
-    public bool IsOccupied() { return isOcupied; }
-    public void SetOccupied(bool occupied) { isOcupied = occupied; }
+    public bool IsOccupied() { return isOccupied; }
+    public void SetOccupied(bool occupied) { isOccupied = occupied; }
     public GameObject GetOccupant() { return occupant; }
-    public void SetOccupent(GameObject newOccupent) { occupant = newOccupent; }
+    public void SetOccupent(GameObject newOccupent)
+    {
+        occupant = newOccupent;
+        if (occupant == null)
+        {
+            isOccupied = false;
+        }
+        else {
+            isOccupied = true;
+        }
+    }
 
 }
