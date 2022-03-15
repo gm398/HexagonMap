@@ -31,7 +31,7 @@ public class SelectionManager : MonoBehaviour
     public void HandleClick(Vector3 mousePosition)
     {
         GameObject result;
-        if (FindTarget(mousePosition, out result))
+        if (FindTarget(mousePosition, out result) && !Input.GetKey(KeyCode.Mouse3))
         {
             hexGrid.RevertHexs();//resets all the hexes click states
             currentHex = null;
@@ -61,7 +61,7 @@ public class SelectionManager : MonoBehaviour
     public void HandleRightClick(Vector3 mousePosition)
     {
         GameObject result;
-        if (FindTarget(mousePosition, out result))
+        if (FindTarget(mousePosition, out result) && !Input.GetKey(KeyCode.Mouse3))
         {
             //DisplayPath(result);
             if (currentSelection != null)

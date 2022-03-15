@@ -33,12 +33,14 @@ public class UnitCombatController : MonoBehaviour
 
     void AimAtTarget()
     {
+     
         Hex currentHex = controller.GetcurrentHex();
         GameObject closest = null;
         bool targetInRange = false;
         if (target != null)
         {
-            targetInRange = target.GetComponentInParent<UnitController>().GetcurrentHex().DistanceFromHex(currentHex) <= range;
+            if (!target.activeInHierarchy) { target = null; }
+            else { targetInRange = target.GetComponentInParent<UnitController>().GetcurrentHex().DistanceFromHex(currentHex) <= range; }
         }
         if (!targetInRange)
         {

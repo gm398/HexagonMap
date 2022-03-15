@@ -144,7 +144,7 @@ public class UnitController : MonoBehaviour
     {
         hexGrid.GetHex(enemy.GetComponentInParent<HexCoordinates>().GetHexCoordsRQS(), out targetHex);
         targetHex = enemy.GetComponentInParent<UnitController>().GetcurrentHex();
-        if(enemyLayers != (enemyLayers | (1 << enemy.layer)) && targetHex != null) { SetTargetHex(targetHex); }
+        if(enemyLayers != (enemyLayers & (1 << enemy.layer)) && targetHex != null) { SetTargetHex(targetHex); }
         List<Hex> temp;
         Debug.Log("target is an enemy");
         bool validTarget = false;

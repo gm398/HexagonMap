@@ -28,7 +28,8 @@ public class PathFinding
             Hex currentHex = currentPrioHex.hex;
             
             if (currentHex == goal || goal.DistanceFromHex(currentHex) <= range) {
-               // Debug.Log("reached goal");
+                // Debug.Log("reached goal");
+                goal = currentHex;
                 break; }
 
             foreach (Hex nextHex in hexGrid.GetNeighbours(currentHex))
@@ -100,6 +101,7 @@ public class PathFinding
             if (compareHex == null) { return 1; }
             else { return this.priority.CompareTo(compareHex.priority); }
         }
+        public float GetPriority() { return priority; }
     }
 
     private class HexQueue

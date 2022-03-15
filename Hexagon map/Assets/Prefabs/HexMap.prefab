@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5603505376902362919
 Transform:
@@ -50,7 +50,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7731379147071024676
 Transform:
@@ -89,7 +89,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &8685650444272106129
 Transform:
@@ -121,6 +121,10 @@ PrefabInstance:
     - target: {fileID: 4077474317266712237, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
       propertyPath: m_Name
       value: MapPiece
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077474317266712237, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4598796461194193575, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
       propertyPath: m_RootOrder
@@ -398,6 +402,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MapPiece (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4077474317266712237, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 4598796461194193575, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -533,6 +541,10 @@ PrefabInstance:
     - target: {fileID: 4077474317266712237, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
       propertyPath: m_Name
       value: MapPiece (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077474317266712237, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4598796461194193575, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
       propertyPath: m_RootOrder
@@ -814,6 +826,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MapPiece (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 4077474317266712237, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 4598796461194193575, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -876,6 +892,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MapPiece (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 4077474317266712237, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 4598796461194193575, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -937,6 +957,10 @@ PrefabInstance:
     - target: {fileID: 4077474317266712237, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
       propertyPath: m_Name
       value: MapPiece (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077474317266712237, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4598796461194193575, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
       propertyPath: m_RootOrder
@@ -1069,6 +1093,10 @@ PrefabInstance:
     - target: {fileID: 4077474317266712237, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
       propertyPath: m_Name
       value: MapPiece (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077474317266712237, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4598796461194193575, guid: 8f9278ef5e0c2ea41bb17532d9b39b0e, type: 3}
       propertyPath: m_RootOrder
