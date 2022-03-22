@@ -411,7 +411,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7635826562936255635, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_ReceiveShadows
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7635826562936255635, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_LightProbeUsage
@@ -529,6 +529,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7635826562936255635, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_StitchLightmapSeams
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
+      propertyPath: m_ReceiveShadows
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7635826562936255635, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
