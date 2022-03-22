@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PathFinding
 {
-    
+    //draw a diagram
     //the A* search algorithm
     public bool AStarSearch(HexGrid hexGrid, Hex start, Hex goal, out List<Hex> rout, float heightStep, GameObject unit, out Dictionary<Hex, Hex> visited, LayerMask enemyLayers, int range)
     {

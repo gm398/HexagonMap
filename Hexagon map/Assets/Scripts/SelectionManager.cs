@@ -17,6 +17,13 @@ public class SelectionManager : MonoBehaviour
 
     private Hex currentHex;
     private List<GameObject> currentSelection;
+    bool isMouseDown = false;
+    [SerializeField] float mouseHoldActivationTime = .02f;
+    float mouseHeldTimer = 0;
+    Vector3 mouseStart;
+    Vector3 mouseEnd;
+    [SerializeField] GameObject selectionCube;
+    [SerializeField] GameObject camHolder;
 
     private void Awake()
     {
@@ -25,8 +32,66 @@ public class SelectionManager : MonoBehaviour
             mainCamers = Camera.main;
         }
         currentSelection = new List<GameObject>();
+        selectionCube.SetActive(false);
+        selectionCube.GetComponent<Collider>().isTrigger = true;
     }
 
+    private void Update()
+    {
+        DetectMouseClick();
+    }
+    void DetectMouseClick()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            HandleClick(Input.mousePosition);
+            mouseHeldTimer = 0f;
+
+            Vector3 f;
+            if (MousePointingTo(out f))
+            {
+                mouseStart = f;
+            }
+            isMouseDown = false;
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            HandleRightClick(Input.mousePosition);
+        }
+        if (Input.GetMouseButton(0))
+        {
+            mouseHeldTimer += Time.deltaTime;
+            if(mouseHeldTimer >= mouseHoldActivationTime && !isMouseDown)
+            {
+                isMouseDown = true;
+                selectionCube.SetActive(true);
+            }
+            if (isMouseDown)
+            {
+                Vector3 f;
+                if (MousePointingTo(out f))
+                {
+                    mouseEnd = f;
+                }
+                MoveSelectinBox();
+            }
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (isMouseDown)
+            {
+                foreach (GameObject g in GetUnitsFromBox())
+                {
+                    currentSelection.Add(g);
+                }
+            }
+            selectionCube.SetActive(false);
+            isMouseDown = false;
+            mouseHeldTimer = 0f;
+            mouseStart = new Vector3(0, 0, -100);
+            mouseEnd = new Vector3(0, 0, -100);
+        }
+    }
 
     public void HandleClick(Vector3 mousePosition)
     {
@@ -107,6 +172,21 @@ public class SelectionManager : MonoBehaviour
             
         }
     }
+    
+    private void MoveSelectinBox()
+    {
+        Vector3 newPosition = (mouseStart + mouseEnd)/2;
+        selectionCube.transform.position = newPosition;
+        selectionCube.transform.localScale = new Vector3(mouseStart.x - mouseEnd.x, 3, mouseStart.z - mouseEnd.z);
+        //selectionCube.transform.rotation = camHolder.transform.rotation;
+        //selectionCube.transform.rotation = cam.transform.rotation;
+    }
+    private List<GameObject> GetUnitsFromBox()
+    {
+        //selectionCube
+
+        return new List<GameObject>();
+    }
 
     //used to display how the pathfinding is workingon a hexgrid
     private void DisplayPath(GameObject result)
@@ -152,6 +232,18 @@ public class SelectionManager : MonoBehaviour
             return true;
         }
         result = null;
+        return false;
+    }
+    private bool MousePointingTo(out Vector3 mousePoint)
+    {
+        RaycastHit hit;
+        Ray ray = mainCamers.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, 100f, (1<<0), QueryTriggerInteraction.Ignore))
+        {
+            mousePoint = hit.point;
+            return true;
+        }
+        mousePoint = new Vector3();
         return false;
     }
 }
