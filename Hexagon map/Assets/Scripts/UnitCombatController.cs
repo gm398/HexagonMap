@@ -35,6 +35,7 @@ public class UnitCombatController : MonoBehaviour
     {
      
         Hex currentHex = controller.GetcurrentHex();
+        if(currentHex == null) { return; }
         GameObject closest = null;
         bool targetInRange = false;
         if (target != null)

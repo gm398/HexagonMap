@@ -1,19 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!64 &6158137621765526887
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1702469753889210453}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -2432090755550338912, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
 --- !u!1 &2216308456627392916
 GameObject:
   m_ObjectHideFlags: 0
@@ -465,11 +451,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
---- !u!1 &1702469753889210453 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
-  m_PrefabInstance: {fileID: 1972870109712416004}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2083956700890110703 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
@@ -535,12 +516,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7635826562936255635, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_MotionVectors
-      value: 2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
+      propertyPath: m_StitchLightmapSeams
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7635826562936255635, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_ReflectionProbeUsage
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7635826562936255635, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -560,7 +553,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8164078558771037576, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 126
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}

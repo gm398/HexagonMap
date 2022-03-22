@@ -37,22 +37,30 @@ public class SelectionManager : MonoBehaviour
             currentHex = null;
             if (!(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)))
             {
+                foreach(GameObject s in currentSelection)
+                {
+                    UnitController uc = s.GetComponentInParent<UnitController>();
+                    if(uc != null) { uc.SetSelected(false); }
+                }
                 currentSelection.Clear();
             }
 
-            if (result.GetComponentInParent<Hex>() != null)
+            UnitController unitController = result.GetComponentInParent<UnitController>();
+            Hex targetHex = result.GetComponentInParent<Hex>();
+            if (targetHex != null)
             {
                 
-                Hex selectedHex = result.GetComponentInParent<Hex>();
+                Hex selectedHex = targetHex;
                 Debug.Log("Hex RQS:" + selectedHex.GetHexCoordinates().GetHexCoordsRQS() + " .");
 
                 currentHex = selectedHex;//currently selected hex
             }
-            else if(result.GetComponentInParent<UnitController>() != null)
+            else if(unitController != null)
             {
-                if (result.GetComponentInParent<UnitController>().isPlayerUnit())
+                if (unitController.isPlayerUnit())
                 {
                     currentSelection.Add(result);
+                    unitController.SetSelected(true);
                 }
             }
             else { Debug.Log("not a valid selection"); }
@@ -64,7 +72,7 @@ public class SelectionManager : MonoBehaviour
         if (FindTarget(mousePosition, out result) && !Input.GetKey(KeyCode.Mouse3))
         {
             //DisplayPath(result);
-            if (currentSelection != null)
+            if (currentSelection != null && result != null)
                 {
                 UnitController enemyController = result.GetComponentInParent<UnitController>();
                 Hex targetHex = result.GetComponentInParent<Hex>();
@@ -93,23 +101,6 @@ public class SelectionManager : MonoBehaviour
                                 controller.SetTargetHex(targetHex);
                             }
                         }
-                        
-                        
-                    /*
-                        Hex targetHex;
-                        hexGrid.GetHex(result.GetComponentInParent<HexCoordinates>().GetHexCoordsRQS(), out targetHex);
-                        GameObject target = targetHex.GetOccupant();
-                        if (target != null)
-                        {
-                            if (selected.GetComponentInParent<UnitController>().IsEnemy(target.layer))
-                            {
-                                selected.GetComponentInParent<UnitController>().SetTargetEnemy(target);
-                            }
-                        }
-                        else
-                        {
-                            selected.GetComponentInParent<UnitController>().SetTargetHex(targetHex);
-                        }*/
                     }
                 }
             }
@@ -153,7 +144,8 @@ public class SelectionManager : MonoBehaviour
     }
     private bool FindTarget(Vector3 mousePosition, out GameObject result)
     {
-        RaycastHit hit;Ray ray = mainCamers.ScreenPointToRay(mousePosition);
+        RaycastHit hit;
+        Ray ray = mainCamers.ScreenPointToRay(mousePosition);
         if(Physics.Raycast(ray, out hit, selectionMask))
         {
             result = hit.collider.gameObject;

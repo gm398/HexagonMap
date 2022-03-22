@@ -15,7 +15,7 @@ public class Hex : MonoBehaviour
     [SerializeField] Transform targetPoint;
 
     private bool isOccupied = false;
-    private GameObject occupant = null;
+    [SerializeField] GameObject occupant = null;
     private Material origionalMaterial;
     private Material newMaterial;
 

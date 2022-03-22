@@ -17,7 +17,7 @@ public class UnitController : MonoBehaviour
     private Hex targetHex;
     List<Hex> path = new List<Hex>();
 
-    
+    [SerializeField] GameObject selected;
     
     private void Awake()
     {
@@ -34,14 +34,14 @@ public class UnitController : MonoBehaviour
     void Update()
     {
         if(currentHex == null) {
-            hexGrid.GetHex(hexCoords.GetHexCoordsRQS(), out currentHex);
-            currentHex.SetOccupent(this.gameObject);
+            Hex temp;
+            if(hexGrid.GetHex(hexCoords.GetHexCoordsRQS(), out temp))
+            {
+                currentHex = temp;
+                currentHex.SetOccupent(this.gameObject);
+            }
         }
         GoToTarget();
-
-       
-        
-
     }
 
    
@@ -146,6 +146,7 @@ public class UnitController : MonoBehaviour
     }
     public void SetTargetEnemy(GameObject enemy)
     {
+        if(enemy == null) { return; }
         hexGrid.GetHex(enemy.GetComponentInParent<HexCoordinates>().GetHexCoordsRQS(), out targetHex);
         targetHex = enemy.GetComponentInParent<UnitController>().GetcurrentHex();
         if(enemyLayers != (enemyLayers & (1 << enemy.layer)) && targetHex != null) { SetTargetHex(targetHex); }
@@ -183,5 +184,14 @@ public class UnitController : MonoBehaviour
 
     public bool IsEnemy(int layer) { return enemyLayers == (enemyLayers & (1 << layer)); }
     public bool CanFly() { return flyingUnit; }
+
+
+    public void SetSelected(bool isSelected)
+    {
+        if (selected != null)
+        {
+            selected.SetActive(isSelected);
+        }
+    }
 
 }
