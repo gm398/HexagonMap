@@ -177,15 +177,45 @@ public class SelectionManager : MonoBehaviour
     {
         Vector3 newPosition = (mouseStart + mouseEnd)/2;
         selectionCube.transform.position = newPosition;
-        selectionCube.transform.localScale = new Vector3(mouseStart.x - mouseEnd.x, 3, mouseStart.z - mouseEnd.z);
-        //selectionCube.transform.rotation = camHolder.transform.rotation;
+        float camRotation = camHolder.transform.rotation.y;
+        /*Vector3 scale = new Vector3(
+             (mouseStart.x - mouseEnd.x),
+             3,
+             (mouseStart.z - mouseEnd.z));
+             */
+        Vector2 startPos, endPos;
+        startPos = new Vector2(mouseStart.x, mouseStart.z);
+        endPos = new Vector2(mouseEnd.x, mouseEnd.z);
+       
+        float angle = Vector2.Angle(startPos - endPos, new Vector2(1, 0));
+        Debug.Log(angle);
+        
+        float dis = Vector2.Distance(startPos, endPos);
+        float x, z;
+        angle = Mathf.Deg2Rad * angle;
+        x = dis * Mathf.Cos(angle);
+        z = dis * Mathf.Sin(angle);
+
+        Vector3 startPoint = (Quaternion.Euler(0, camRotation, 0) * (mouseStart - newPosition)) + newPosition;
+        Vector3 endPoint = (Quaternion.Euler(0, camRotation, 0) * (mouseEnd - newPosition)) + newPosition;
+        /*
+        Vector3 scale = new Vector3(
+             (startPoint.x - endPoint.x),
+             3,
+             (startPoint.z - endPoint.z));
+             */
+        Vector3 scale = new Vector3(x, 3, z);
+        selectionCube.transform.localScale =  scale;//new Vector3(x, 3, z);
+        selectionCube.transform.rotation = camHolder.transform.rotation;
         //selectionCube.transform.rotation = cam.transform.rotation;
     }
     private List<GameObject> GetUnitsFromBox()
     {
         //selectionCube
-
-        return new List<GameObject>();
+        BoxSelector boxSelector = selectionCube.GetComponent<BoxSelector>();
+        List<GameObject> found = boxSelector.GetSelected();
+        boxSelector.ClearSelected();
+        return found;
     }
 
     //used to display how the pathfinding is workingon a hexgrid
