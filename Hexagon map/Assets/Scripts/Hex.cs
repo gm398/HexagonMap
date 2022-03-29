@@ -15,21 +15,26 @@ public class Hex : MonoBehaviour
     [SerializeField] Transform targetPoint;
 
     private bool isOccupied = false;
+    [SerializeField] bool isVisible = false;
+    int seenBy = 0;
     [SerializeField] GameObject occupant = null;
-    private Material origionalMaterial;
-    private Material newMaterial;
+
+    [SerializeField] GameObject visuals;
+    [SerializeField] Material defaultMaterial;
+    [SerializeField] Material secondaryMaterial;
 
     private void Awake()
     {
-        origionalMaterial = this.GetComponentInChildren<MeshRenderer>().material;
+        if (defaultMaterial == null)
+        {
+            defaultMaterial = visuals.GetComponentInChildren<MeshRenderer>().material;
+        }
+        SetVisible(isVisible);
         if(this.GetComponent<HexCoordinates>() != null) { hexCoords = this.GetComponent<HexCoordinates>(); }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
         hexCoords.ConvertToHexCords();
     }
+
+  
 
 
     //finds the distance between this hex and another given hex
@@ -45,13 +50,13 @@ public class Hex : MonoBehaviour
     //changes the material of the hex
     public void SetNewMaterial(Material mat)
     {
-        newMaterial = mat;
+        secondaryMaterial = mat;
         this.GetComponentInChildren<MeshRenderer>().material = mat;
     }
     //reverts the material to what it started with
     public void RevertMaterial()
     {
-        this.GetComponentInChildren<MeshRenderer>().material = origionalMaterial;
+        visuals.GetComponentInChildren<MeshRenderer>().material = defaultMaterial;
     }
     
     public bool IsTraversable() { return traversable; }
@@ -73,4 +78,35 @@ public class Hex : MonoBehaviour
         }
     }
 
+    public void SetVisible(bool visible)
+    {
+        isVisible = visible;
+        if (isVisible)
+        {
+            
+            seenBy++;
+        }
+        else
+        {
+            seenBy--;
+        }
+        if(seenBy < 1)
+        {
+            seenBy = 0;
+            visuals.GetComponentInChildren<MeshRenderer>().material = secondaryMaterial;
+            if (occupant != null)
+            {
+                occupant.SendMessage("SetVisible", false, SendMessageOptions.DontRequireReceiver);
+            }
+        }
+        else
+        {
+            visuals.GetComponentInChildren<MeshRenderer>().material = defaultMaterial;
+            if(occupant != null)
+            {
+                occupant.SendMessage("SetVisible", true, SendMessageOptions.DontRequireReceiver);
+            }
+        }
+    }
+    public bool IsVisible() { return isVisible; }
 }

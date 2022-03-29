@@ -8,6 +8,7 @@ public class UnitController : MonoBehaviour
     [SerializeField] float speed = 5f;
     [SerializeField] float heightStep = .5f;
     [SerializeField] bool flyingUnit = false;
+    [SerializeField] int visionRange = 3;
     HexGrid hexGrid;
     HexCoordinates hexCoords;
     UnitCombatController combatController;
@@ -17,16 +18,20 @@ public class UnitController : MonoBehaviour
     private Hex targetHex;
     List<Hex> path = new List<Hex>();
 
+    [SerializeField] List<GameObject> visibleComponents;
     [SerializeField] GameObject selected;
+    
+    private List<Hex> visibleHexes;
     
     private void Awake()
     {
+        visibleHexes = new List<Hex>();
         if (this.GetComponent<HexCoordinates>() != null) { hexCoords = this.GetComponent<HexCoordinates>(); }
         else { hexCoords = this.gameObject.AddComponent<HexCoordinates>(); }
         hexCoords.MoveToGridCords();
         hexGrid = GameObject.FindGameObjectWithTag("Map").GetComponent<HexGrid>();
         combatController = this.GetComponent<UnitCombatController>();
-       
+        Invoke("UpdateVision", 1f);
 
     }
 
@@ -77,11 +82,15 @@ public class UnitController : MonoBehaviour
 
             currentHex.SetOccupent(null);
             hexCoords.MoveToGridCords();
+
             Vector3 pos = transform.position;
             pos.y = path[0].GetTargetPoint().y;
             transform.position = pos;
+
             hexGrid.GetHex(hexCoords.GetHexCoordsRQS(), out currentHex);
             currentHex.SetOccupent(this.gameObject);
+
+            UpdateVision();
 
             if (path.Count > 0)
             {
@@ -96,7 +105,27 @@ public class UnitController : MonoBehaviour
         }
          
     }
-    
+    void UpdateVision()
+    {
+        if (!playerUnit) { return; }
+        List<Hex> newVision = hexGrid.GetHexesInRange(visionRange, currentHex);
+        foreach(Hex h in visibleHexes)
+        {
+            h.SetVisible(false);
+        }
+        foreach(Hex h in newVision)
+        {
+            h.SetVisible(true);
+        }
+        visibleHexes = newVision;
+    }
+    void RemoveVision()
+    {
+        foreach (Hex h in visibleHexes)
+        {
+            h.SetVisible(false);
+        }
+    }
     void MoveToHex(Hex destination)
     {
         hexCoords.ConvertToHexCords();
@@ -108,7 +137,7 @@ public class UnitController : MonoBehaviour
             * speed
             * Time.deltaTime)
             / currentHex.GetMoveDificulty());
-        
+        Physics.SyncTransforms();
     }
 
     void UpdatePath()
@@ -175,7 +204,17 @@ public class UnitController : MonoBehaviour
     {
         Debug.Log("unit is dead");
         currentHex.SetOccupent(null);
+        RemoveVision();
         this.gameObject.SetActive(false);
+    }
+
+    public void SetVisible(bool isvis)
+    {
+        foreach(GameObject c in visibleComponents)
+        {
+            c.SetActive(isvis);
+        }
+        
     }
 
     public Hex GetcurrentHex() { return currentHex; }

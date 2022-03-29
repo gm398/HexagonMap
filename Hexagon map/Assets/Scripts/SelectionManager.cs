@@ -33,7 +33,6 @@ public class SelectionManager : MonoBehaviour
         }
         currentSelection = new List<GameObject>();
         selectionCube.SetActive(false);
-        selectionCube.GetComponent<Collider>().isTrigger = true;
     }
 
     private void Update()
@@ -83,6 +82,11 @@ public class SelectionManager : MonoBehaviour
                 foreach (GameObject g in GetUnitsFromBox())
                 {
                     currentSelection.Add(g);
+                    UnitController uc = g.GetComponentInParent<UnitController>();
+                    if (uc != null)
+                    {
+                        uc.SetSelected(true);
+                    }
                 }
             }
             selectionCube.SetActive(false);
@@ -98,7 +102,7 @@ public class SelectionManager : MonoBehaviour
         GameObject result;
         if (FindTarget(mousePosition, out result) && !Input.GetKey(KeyCode.Mouse3))
         {
-            hexGrid.RevertHexs();//resets all the hexes click states
+            //hexGrid.RevertHexs();//resets all the hexes click states
             currentHex = null;
             if (!(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)))
             {
@@ -116,7 +120,7 @@ public class SelectionManager : MonoBehaviour
             {
                 
                 Hex selectedHex = targetHex;
-                Debug.Log("Hex RQS:" + selectedHex.GetHexCoordinates().GetHexCoordsRQS() + " .");
+                //Debug.Log("Hex RQS:" + selectedHex.GetHexCoordinates().GetHexCoordsRQS() + " .");
 
                 currentHex = selectedHex;//currently selected hex
             }
@@ -141,29 +145,35 @@ public class SelectionManager : MonoBehaviour
                 {
                 UnitController enemyController = result.GetComponentInParent<UnitController>();
                 Hex targetHex = result.GetComponentInParent<Hex>();
-                if(targetHex == null) { hexGrid.GetHex(result.GetComponentInParent<HexCoordinates>().GetHexCoordsRQS(), out targetHex); }
+                HexCoordinates coords = result.GetComponentInParent<HexCoordinates>();
+                if(coords == null && targetHex == null && enemyController == null) { return; }
+
+                if (targetHex == null) { hexGrid.GetHex(coords.GetHexCoordsRQS(), out targetHex); }
                 foreach (GameObject selected in currentSelection)
                 {
                     if (selected != null)
                     {
-                       
-                        UnitController controller = selected.GetComponentInParent<UnitController>();
-                        if (enemyController != null)
+                        if (selected.activeInHierarchy)
                         {
-                            controller.SetTargetEnemy(result);
-                        }
-                        else if (targetHex != null)
-                        {
-                            int targetLayer = -1;
-                            GameObject enemy = targetHex.GetOccupant();
-                            if (enemy != null) { targetLayer = enemy.layer; }
-                            if (controller.IsEnemy(targetLayer))
+                            UnitController controller = selected.GetComponentInParent<UnitController>();
+                            if (enemyController != null)
                             {
                                 controller.SetTargetEnemy(result);
                             }
-                            else
+                            else if (targetHex != null)
                             {
-                                controller.SetTargetHex(targetHex);
+                                int targetLayer = -1;
+                                GameObject enemy = targetHex.GetOccupant();
+                                if (enemy != null) { targetLayer = enemy.layer; }
+                                if (controller.IsEnemy(targetLayer))
+                                {
+                                    controller.SetTargetEnemy(enemy);
+                                }
+                                else
+
+                                {
+                                    controller.SetTargetHex(targetHex);
+                                }
                             }
                         }
                     }
@@ -178,43 +188,22 @@ public class SelectionManager : MonoBehaviour
         Vector3 newPosition = (mouseStart + mouseEnd)/2;
         selectionCube.transform.position = newPosition;
         float camRotation = camHolder.transform.rotation.y;
-        /*Vector3 scale = new Vector3(
-             (mouseStart.x - mouseEnd.x),
-             3,
-             (mouseStart.z - mouseEnd.z));
-             */
-        Vector2 startPos, endPos;
-        startPos = new Vector2(mouseStart.x, mouseStart.z);
-        endPos = new Vector2(mouseEnd.x, mouseEnd.z);
        
-        float angle = Vector2.Angle(startPos - endPos, new Vector2(1, 0));
-        Debug.Log(angle);
-        
-        float dis = Vector2.Distance(startPos, endPos);
-        float x, z;
-        angle = Mathf.Deg2Rad * angle;
-        x = dis * Mathf.Cos(angle);
-        z = dis * Mathf.Sin(angle);
 
-        Vector3 startPoint = (Quaternion.Euler(0, camRotation, 0) * (mouseStart - newPosition)) + newPosition;
-        Vector3 endPoint = (Quaternion.Euler(0, camRotation, 0) * (mouseEnd - newPosition)) + newPosition;
-        /*
-        Vector3 scale = new Vector3(
-             (startPoint.x - endPoint.x),
-             3,
-             (startPoint.z - endPoint.z));
-             */
-        Vector3 scale = new Vector3(x, 3, z);
+
+        
+        Vector3 scale = new Vector3(Mathf.Abs(mouseStart.x - mouseEnd.x), 3, Mathf.Abs(mouseStart.z - mouseEnd.z));
         selectionCube.transform.localScale =  scale;//new Vector3(x, 3, z);
         selectionCube.transform.rotation = camHolder.transform.rotation;
         //selectionCube.transform.rotation = cam.transform.rotation;
+        Physics.SyncTransforms();
     }
     private List<GameObject> GetUnitsFromBox()
     {
         //selectionCube
         BoxSelector boxSelector = selectionCube.GetComponent<BoxSelector>();
-        List<GameObject> found = boxSelector.GetSelected();
-        boxSelector.ClearSelected();
+        List<GameObject> found = boxSelector.CheckForUnits(1<<8, Quaternion.identity);
+        
         return found;
     }
 

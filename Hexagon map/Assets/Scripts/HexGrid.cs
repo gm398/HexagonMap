@@ -5,7 +5,7 @@ using UnityEngine;
 public class HexGrid : MonoBehaviour
 {
     [SerializeField] List<Hex> hexs;
-    
+    List<Hex> visibleHexs;
     [SerializeField] Dictionary<Vector3, Hex> hexDictionary = new Dictionary<Vector3, Hex>();
     [SerializeField] GameObject[] mapPieces;
     
@@ -15,6 +15,8 @@ public class HexGrid : MonoBehaviour
     [SerializeField] Material mat1, mat2;
 
     PathFinding pathFinder = new PathFinding();
+
+    
     // Start is called before the first frame update
     private void Awake()
     {
@@ -22,12 +24,7 @@ public class HexGrid : MonoBehaviour
         AddHexsToDictionary();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+   
     [ContextMenu("Test")]
     public void TestPrint()
     {
@@ -104,27 +101,33 @@ public class HexGrid : MonoBehaviour
     public List<Hex> GetHexesInRange(int range, Hex center)
     {
         List<Hex> hexList = new List<Hex>();
+        Vector3 centerCoords = center.GetHexCoordinates().GetHexCoordsRQS();
         for(int q = -range; q <= range; q++)
         {
             for (int r = -range; r <= range; r++)
             {
                 for (int s = -range; s <= range; s++)
                 {
-                    if(q + r + s == 0)
+                    if (q + r + s == 0)
                     {
                         
-                        if(GetHex(new Vector3(r, q, s), out Hex addition)){
+                        if (GetHex(new Vector3(r, q, s) + centerCoords, out Hex addition))
+                        {
                             hexList.Add(addition);
-                            Debug.Log("hex added");
+                            //Debug.Log("hex added");
                         }
                     }
                 }
+                
             }
         }
 
 
         return hexList;
     }
+
+    
+    public List<Hex> GetVisibleHexs() { return visibleHexs; }
 
     public void RevertHexs()
     {

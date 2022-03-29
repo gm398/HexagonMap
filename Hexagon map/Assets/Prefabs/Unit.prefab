@@ -106,7 +106,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3760415184038719882}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Healthbar holder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,10 +180,14 @@ MonoBehaviour:
   speed: 2
   heightStep: 0.5
   flyingUnit: 0
+  visionRange: 3
   currentHex: {fileID: 0}
   enemyLayers:
     serializedVersion: 2
     m_Bits: 512
+  visibleComponents:
+  - {fileID: 3783916272113244247}
+  - {fileID: 4753714230990683816}
   selected: {fileID: 8105948838608793941}
 --- !u!114 &3039745322124751306
 MonoBehaviour:
@@ -318,9 +322,33 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3760415184038719882}
     m_Modifications:
+    - target: {fileID: 530801397927472387, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 693524267487996350, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 693524267487996350, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1483835562110636932, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
       propertyPath: m_Name
       value: healthBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 1483835562110636932, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1636767197350809683, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3322222218812085280, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4378160350032619721, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
       propertyPath: m_AnchorMax.x
@@ -329,6 +357,26 @@ PrefabInstance:
     - target: {fileID: 4378160350032619721, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4544039148713513985, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5680296304127775394, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6373599184896410407, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6782342173848337114, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7149967578515276618, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7226104182092189569, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
       propertyPath: m_Pivot.x
@@ -421,6 +469,10 @@ PrefabInstance:
     - target: {fileID: 8807992871531748040, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9020907435948089682, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 237ede7b2081d7b459754c825a1cb44a, type: 3}

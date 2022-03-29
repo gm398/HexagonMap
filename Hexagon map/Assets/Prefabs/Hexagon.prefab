@@ -307,6 +307,11 @@ MonoBehaviour:
   traversable: 1
   moveDificulty: 1
   targetPoint: {fileID: 8170540258961613958}
+  isVisible: 0
+  occupant: {fileID: 0}
+  visuals: {fileID: 1702469753889210453}
+  defaultMaterial: {fileID: 0}
+  secondaryMaterial: {fileID: 2100000, guid: a3349f5602f08e2429954e00d8e63a29, type: 2}
 --- !u!114 &6582444294548839324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -451,6 +456,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
+--- !u!1 &1702469753889210453 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
+  m_PrefabInstance: {fileID: 1972870109712416004}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2083956700890110703 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
@@ -528,11 +538,11 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7635826562936255635, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
-      propertyPath: m_StitchLightmapSeams
+      propertyPath: m_ReceiveShadows
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7635826562936255635, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
-      propertyPath: m_ReceiveShadows
+      propertyPath: m_StitchLightmapSeams
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7635826562936255635, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
