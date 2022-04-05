@@ -7,6 +7,7 @@ public class UnitController : MonoBehaviour
     [SerializeField] bool playerUnit;
     [SerializeField] float speed = 5f;
     [SerializeField] float heightStep = .5f;
+    [SerializeField] float unitHeight = 0f;
     [SerializeField] bool flyingUnit = false;
     [SerializeField] int visionRange = 3;
     HexGrid hexGrid;
@@ -32,7 +33,7 @@ public class UnitController : MonoBehaviour
         hexGrid = GameObject.FindGameObjectWithTag("Map").GetComponent<HexGrid>();
         combatController = this.GetComponent<UnitCombatController>();
         Invoke("UpdateVision", 1f);
-
+        if (!playerUnit) { SetVisible(false); }
     }
 
     // Update is called once per frame
@@ -73,7 +74,8 @@ public class UnitController : MonoBehaviour
             path[0].SetOccupent(this.gameObject);
             currentHex.SetOccupent(null);
         }
-        if (Vector3.Distance(transform.position, path[0].GetTargetPoint()) > .05)
+        Vector3 heightDiff = new Vector3(0, unitHeight, 0);
+        if (Vector3.Distance(transform.position, path[0].GetTargetPoint() + heightDiff) > .05)
         {
             MoveToHex(path[0]);
         }
@@ -84,7 +86,7 @@ public class UnitController : MonoBehaviour
             hexCoords.MoveToGridCords();
 
             Vector3 pos = transform.position;
-            pos.y = path[0].GetTargetPoint().y;
+            pos.y = path[0].GetTargetPoint().y + unitHeight;
             transform.position = pos;
 
             hexGrid.GetHex(hexCoords.GetHexCoordsRQS(), out currentHex);
@@ -133,10 +135,19 @@ public class UnitController : MonoBehaviour
         if (!hexGrid.GetHex(hexCoords.GetHexCoordsRQS(), out currentHex)){
             currentHex = destination; //not perfect
         }
-        transform.Translate(((destination.GetTargetPoint() - transform.position).normalized
+        Vector3 heightDiff = new Vector3(0, unitHeight, 0);
+        if (flyingUnit)
+        {
+            transform.Translate(((destination.GetTargetPoint() + heightDiff - transform.position).normalized
             * speed
-            * Time.deltaTime)
-            / currentHex.GetMoveDificulty());
+            * Time.deltaTime));
+        }
+        else {
+            transform.Translate(((destination.GetTargetPoint() + heightDiff - transform.position).normalized
+                * speed
+                * Time.deltaTime)
+                / currentHex.GetMoveDificulty());
+        }
         Physics.SyncTransforms();
     }
 

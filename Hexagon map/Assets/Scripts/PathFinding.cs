@@ -51,7 +51,9 @@ public class PathFinding
                         )
                     ) 
                 {
-                    float newCost = costSoFar[currentHex] + nextHex.GetMoveDificulty();
+                    float newCost = costSoFar[currentHex];
+                    if (canFly) { newCost += 1; }
+                    else { newCost += nextHex.GetMoveDificulty(); }
 
                     float costOfNext = 0;
                     if (costSoFar.ContainsKey(nextHex)) { costOfNext = costSoFar[nextHex]; }

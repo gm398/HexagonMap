@@ -187,14 +187,11 @@ public class SelectionManager : MonoBehaviour
     {
         Vector3 newPosition = (mouseStart + mouseEnd)/2;
         selectionCube.transform.position = newPosition;
-        float camRotation = camHolder.transform.rotation.y;
        
-
-
-        
         Vector3 scale = new Vector3(Mathf.Abs(mouseStart.x - mouseEnd.x), 3, Mathf.Abs(mouseStart.z - mouseEnd.z));
+        
         selectionCube.transform.localScale =  scale;//new Vector3(x, 3, z);
-        selectionCube.transform.rotation = camHolder.transform.rotation;
+        //selectionCube.transform.rotation = camHolder.transform.rotation;
         //selectionCube.transform.rotation = cam.transform.rotation;
         Physics.SyncTransforms();
     }

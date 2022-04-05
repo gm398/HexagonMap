@@ -173,7 +173,7 @@ MonoBehaviour:
   hexGrid: {fileID: 1149629755260433702}
   selectionMaterial: {fileID: 2100000, guid: 6efdb53f7be265847b0292bbe65717e8, type: 2}
   testMat: {fileID: 2100000, guid: a2b386eb9e2b1eb4c9067a78bb07f85e, type: 2}
-  mouseHoldActivationTime: 0.1
+  mouseHoldActivationTime: 0.05
   selectionCube: {fileID: 2245223282125656672}
   camHolder: {fileID: 1149629754541872607}
 --- !u!1 &1149629755222856559
