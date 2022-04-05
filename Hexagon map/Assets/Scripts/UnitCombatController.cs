@@ -8,16 +8,24 @@ public class UnitCombatController : MonoBehaviour
     [SerializeField] int range = 1;
     [SerializeField] float attackSpeed = 1f;
     [SerializeField] float damage = 10;
+    [SerializeField] bool healer = false;
     LayerMask enemyLayers;
-    bool canAttack = true;
-    GameObject target;
+    [SerializeField] bool canAttack = true;
+    [SerializeField] GameObject target;
 
     UnitController controller;
 
     private void Awake()
     {
         controller = this.gameObject.GetComponent<UnitController>();
-        enemyLayers = controller.GetEnemyLayers();
+        if (healer)
+        {
+            enemyLayers = LayerMask.GetMask(LayerMask.LayerToName(this.gameObject.layer));
+        }
+        else
+        {
+            enemyLayers = controller.GetEnemyLayers();
+        }
         if(range < 1) { range = 1; }
     }
 
@@ -28,6 +36,7 @@ public class UnitCombatController : MonoBehaviour
         {
             AimAtTarget();
         }
+        CheckTarget();
     }
 
 
@@ -49,26 +58,30 @@ public class UnitCombatController : MonoBehaviour
 
             foreach (Collider c in enemys)
             {
-                UnitController enemyController = c.GetComponentInParent<UnitController>();
-                if (enemyController != null)
+                if (!c.transform.parent.gameObject.Equals(this.gameObject))
                 {
-                    if (enemyController.GetcurrentHex() != null)
+                    UnitController enemyController = c.GetComponentInParent<UnitController>();
+                    if (enemyController != null)
                     {
-                        if (enemyController.GetcurrentHex().DistanceFromHex(currentHex) <= range)
+                        if (enemyController.GetcurrentHex() != null)
                         {
-                            if (closest == null) { closest = c.gameObject; }
-                            else if (enemyController.GetcurrentHex().DistanceFromHex(currentHex)
-                                < closest.GetComponentInParent<UnitController>().GetcurrentHex().DistanceFromHex(currentHex))
+                            if (enemyController.GetcurrentHex().DistanceFromHex(currentHex) <= range)
                             {
-                                closest = c.gameObject;
+                                if (closest == null) { closest = c.gameObject; }
+                                else if (enemyController.GetcurrentHex().DistanceFromHex(currentHex)
+                                    < closest.GetComponentInParent<UnitController>().GetcurrentHex().DistanceFromHex(currentHex))
+                                {
+                                    closest = c.gameObject;
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        else {
-            if (enemyLayers == (enemyLayers | (1 << target.layer)))
+        else
+        {
+            if (enemyLayers == (enemyLayers & (1 << target.layer)))
             {
                 closest = target;
             }
@@ -82,14 +95,34 @@ public class UnitCombatController : MonoBehaviour
             {
                 enemyHealth.TakeDamage(damage);
                 canAttack = false;
-                Invoke("resetAttack", 1 / attackSpeed);
+                Invoke("ResetAttack", 1 / attackSpeed);
             }
 
 
         } //else {Debug.Log("no closest"); }
     }
 
-    void resetAttack()
+    //checks to see if the current target is still in range and visible, if not then updates pathfinding
+    void CheckTarget()
+    {
+        if (target != null)
+        {
+            UnitController targetController = target.GetComponentInParent<UnitController>();
+            if (targetController != null)
+            {
+                if (!targetController.IsVisible())
+                {
+                    target = null;
+                    return;
+                }
+                if (!EnemyInRange())
+                {
+                    controller.SetTargetEnemy(target);
+                }
+            }
+        }
+    }
+    void ResetAttack()
     {
         canAttack = true;
     }
@@ -117,4 +150,8 @@ public class UnitCombatController : MonoBehaviour
         }
         return false;
     }
+
+
+    public bool IsHealer() { return healer; }
+    public LayerMask GetTargetLayers() { return enemyLayers; }
 }

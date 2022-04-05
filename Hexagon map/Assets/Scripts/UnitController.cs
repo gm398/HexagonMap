@@ -20,6 +20,7 @@ public class UnitController : MonoBehaviour
     List<Hex> path = new List<Hex>();
 
     [SerializeField] List<GameObject> visibleComponents;
+    bool isVisible = true;
     [SerializeField] GameObject selected;
     
     private List<Hex> visibleHexes;
@@ -81,32 +82,41 @@ public class UnitController : MonoBehaviour
         }
         else
         {
-
-            currentHex.SetOccupent(null);
-            hexCoords.MoveToGridCords();
-
-            Vector3 pos = transform.position;
-            pos.y = path[0].GetTargetPoint().y + unitHeight;
-            transform.position = pos;
-
-            hexGrid.GetHex(hexCoords.GetHexCoordsRQS(), out currentHex);
-            currentHex.SetOccupent(this.gameObject);
-
-            UpdateVision();
-
-            if (path.Count > 0)
-            {
-                path.RemoveAt(0);
-                path.TrimExcess();
-            }
-            else
-            {
-                targetHex = null;
-                path = null;
-            }
+            ArriveAtNewHex();
         }
          
     }
+
+    //called once each time the unit arrives at a new hex
+    void ArriveAtNewHex()
+    {
+        currentHex.SetOccupent(null);
+        hexCoords.MoveToGridCords();
+
+        Vector3 pos = transform.position;
+        pos.y = path[0].GetTargetPoint().y + unitHeight;
+        transform.position = pos;
+
+        hexGrid.GetHex(hexCoords.GetHexCoordsRQS(), out currentHex);
+        currentHex.SetOccupent(this.gameObject);
+
+        UpdateVision();
+
+        
+
+        if (path.Count > 0)
+        {
+            path.RemoveAt(0);
+            path.TrimExcess();
+        }
+        else
+        {
+            targetHex = null;
+            path = null;
+        }
+    }
+
+   
     void UpdateVision()
     {
         if (!playerUnit) { return; }
@@ -115,11 +125,16 @@ public class UnitController : MonoBehaviour
         {
             h.SetVisible(false);
         }
+        visibleHexes.Clear();
+        visibleHexes.TrimExcess();
         foreach(Hex h in newVision)
         {
-            h.SetVisible(true);
+            if (h.transform.position.y < transform.position.y + heightStep)
+            {
+                h.SetVisible(true);
+                visibleHexes.Add(h);
+            }
         }
-        visibleHexes = newVision;
     }
     void RemoveVision()
     {
@@ -189,7 +204,10 @@ public class UnitController : MonoBehaviour
         if(enemy == null) { return; }
         hexGrid.GetHex(enemy.GetComponentInParent<HexCoordinates>().GetHexCoordsRQS(), out targetHex);
         targetHex = enemy.GetComponentInParent<UnitController>().GetcurrentHex();
-        if(enemyLayers != (enemyLayers & (1 << enemy.layer)) && targetHex != null) { SetTargetHex(targetHex); }
+
+        LayerMask targetLayers = combatController.GetTargetLayers();
+        if(targetLayers != (targetLayers & (1 << enemy.layer)) && targetHex != null) { SetTargetHex(targetHex); }
+
         List<Hex> temp;
         Debug.Log("target is an enemy");
         bool validTarget = false;
@@ -219,11 +237,12 @@ public class UnitController : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
-    public void SetVisible(bool isvis)
+    public void SetVisible(bool isVis)
     {
         foreach(GameObject c in visibleComponents)
         {
-            c.SetActive(isvis);
+            c.SetActive(isVis);
+            isVisible = isVis;
         }
         
     }
@@ -243,5 +262,8 @@ public class UnitController : MonoBehaviour
             selected.SetActive(isSelected);
         }
     }
+
+
+    public bool IsVisible() { return isVisible; }
 
 }

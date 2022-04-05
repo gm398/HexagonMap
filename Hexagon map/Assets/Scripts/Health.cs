@@ -19,8 +19,11 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        damage -= armor;
-        if(damage < 1) { damage = 1; }
+        if (damage > 0)//if damage is a negative it is healing and not effected by armor
+        {
+            damage -= armor;
+            if (damage < 1) { damage = 1; }
+        }
         currentHealth -= damage;
         if(currentHealth <= 0) { currentHealth = 0; Die(); }
         if(currentHealth > maxHealth) { currentHealth = maxHealth; }

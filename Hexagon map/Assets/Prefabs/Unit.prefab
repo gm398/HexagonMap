@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7552342966512900668}
   - component: {fileID: 2365778982156916589}
   - component: {fileID: 4228569515781714625}
-  - component: {fileID: 2242275585552495218}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -83,20 +82,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2242275585552495218
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 318367009361865960}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &3756398501358784859
 GameObject:
   m_ObjectHideFlags: 0
@@ -417,6 +402,9 @@ MonoBehaviour:
   range: 1
   attackSpeed: 1
   damage: 10
+  healer: 0
+  canAttack: 1
+  target: {fileID: 0}
 --- !u!1 &8105948838608793941
 GameObject:
   m_ObjectHideFlags: 0

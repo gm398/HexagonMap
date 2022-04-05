@@ -80,18 +80,17 @@ public class Hex : MonoBehaviour
 
     public void SetVisible(bool visible)
     {
-        isVisible = visible;
-        if (isVisible)
+        if (visible)
         {
-            
             seenBy++;
         }
         else
         {
             seenBy--;
         }
-        if(seenBy < 1)
+        if (seenBy < 1)
         {
+            isVisible = false;
             seenBy = 0;
             visuals.GetComponentInChildren<MeshRenderer>().material = secondaryMaterial;
             if (occupant != null)
@@ -99,8 +98,9 @@ public class Hex : MonoBehaviour
                 occupant.SendMessage("SetVisible", false, SendMessageOptions.DontRequireReceiver);
             }
         }
-        else
+        else if (!isVisible)
         {
+            isVisible = true;
             visuals.GetComponentInChildren<MeshRenderer>().material = defaultMaterial;
             if(occupant != null)
             {
