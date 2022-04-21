@@ -121,12 +121,11 @@ public class UnitController : MonoBehaviour
     {
         if (!playerUnit) { return; }
         List<Hex> newVision = hexGrid.GetHexesInRange(visionRange, currentHex);
-        foreach(Hex h in visibleHexes)
-        {
-            h.SetVisible(false);
-        }
+
+        RemoveVision();
         visibleHexes.Clear();
         visibleHexes.TrimExcess();
+
         foreach(Hex h in newVision)
         {
             if (h.transform.position.y < transform.position.y + heightStep)
@@ -206,7 +205,7 @@ public class UnitController : MonoBehaviour
         targetHex = enemy.GetComponentInParent<UnitController>().GetcurrentHex();
 
         LayerMask targetLayers = combatController.GetTargetLayers();
-        if(targetLayers != (targetLayers & (1 << enemy.layer)) && targetHex != null) { SetTargetHex(targetHex); }
+        if(targetLayers != (targetLayers & (1 << enemy.layer)) && targetHex != null) { SetTargetHex(targetHex); return; }
 
         List<Hex> temp;
         Debug.Log("target is an enemy");

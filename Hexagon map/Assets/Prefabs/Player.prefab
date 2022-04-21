@@ -150,8 +150,8 @@ MonoBehaviour:
   controller: {fileID: 6566240689623424127}
   speed: 2
   jumpHeight: 0.5
-  jumpGravity: -20
-  fallGravity: -40
+  jumpGravity: -10
+  fallGravity: -20
 --- !u!143 &6566240689623424127
 CharacterController:
   m_ObjectHideFlags: 0
