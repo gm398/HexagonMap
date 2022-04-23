@@ -66,7 +66,7 @@ public class CameraMovement : MonoBehaviour
     {
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, 50))
         {
-            rotationPoint = hit.transform.position;
+            rotationPoint = hit.point;
         }
         else
         {

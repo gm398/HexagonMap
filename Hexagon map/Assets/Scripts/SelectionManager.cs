@@ -25,6 +25,8 @@ public class SelectionManager : MonoBehaviour
     [SerializeField] GameObject selectionCube;
     [SerializeField] GameObject camHolder;
 
+
+    Hex hoveringHex = null;
     private void Awake()
     {
         if(mainCamers == null)
@@ -38,6 +40,31 @@ public class SelectionManager : MonoBehaviour
     private void Update()
     {
         DetectMouseClick();
+        HighlightHoveredHex();
+
+
+    }
+
+    void HighlightHoveredHex()
+    {
+        GameObject hoveringOver;
+        if (hoveringHex != null)
+        {
+            hoveringHex.HighlightHex(false);
+            hoveringHex = null;
+        }
+        if (FindTarget(Input.mousePosition, out hoveringOver))
+        {
+            Hex newHex = hoveringOver.GetComponentInParent<Hex>();
+            if (newHex != null)
+            {
+                hoveringHex = newHex;
+                if (hoveringHex.IsVisible())
+                {
+                    hoveringHex.HighlightHex(true);
+                }
+            }
+        }
     }
     void DetectMouseClick()
     {

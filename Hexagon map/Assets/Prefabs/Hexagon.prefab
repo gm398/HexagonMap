@@ -311,7 +311,8 @@ MonoBehaviour:
   occupant: {fileID: 0}
   visuals: {fileID: 1702469753889210453}
   defaultMaterial: {fileID: 0}
-  secondaryMaterial: {fileID: 2100000, guid: a3349f5602f08e2429954e00d8e63a29, type: 2}
+  hiddenMaterial: {fileID: 2100000, guid: a3349f5602f08e2429954e00d8e63a29, type: 2}
+  highlightedMaterial: {fileID: 2100000, guid: 8ae3088d1dd8d1740b4d0fe089aaa6eb, type: 2}
 --- !u!114 &6582444294548839324
 MonoBehaviour:
   m_ObjectHideFlags: 0

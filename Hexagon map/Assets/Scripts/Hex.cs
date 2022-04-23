@@ -21,7 +21,11 @@ public class Hex : MonoBehaviour
 
     [SerializeField] GameObject visuals;
     [SerializeField] Material defaultMaterial;
-    [SerializeField] Material secondaryMaterial;
+
+    [Tooltip("material displayed when the hex is out of vision")]
+    [SerializeField] Material hiddenMaterial;
+
+    [SerializeField] Material highlightedMaterial;
 
     private void Awake()
     {
@@ -50,13 +54,29 @@ public class Hex : MonoBehaviour
     //changes the material of the hex
     public void SetNewMaterial(Material mat)
     {
-        secondaryMaterial = mat;
+        hiddenMaterial = mat;
         this.GetComponentInChildren<MeshRenderer>().material = mat;
     }
     //reverts the material to what it started with
     public void RevertMaterial()
     {
         visuals.GetComponentInChildren<MeshRenderer>().material = defaultMaterial;
+    }
+
+    public void HighlightHex(bool highlight)
+    {
+        if (highlight)
+        {
+            visuals.GetComponentInChildren<MeshRenderer>().material = highlightedMaterial;
+        }
+        else
+        {
+            if (isVisible)
+            {
+                visuals.GetComponentInChildren<MeshRenderer>().material = defaultMaterial;
+            }
+            else { visuals.GetComponentInChildren<MeshRenderer>().material = hiddenMaterial; }
+        }
     }
     
     public bool IsTraversable() { return traversable; }
@@ -92,7 +112,7 @@ public class Hex : MonoBehaviour
         {
             isVisible = false;
             seenBy = 0;
-            visuals.GetComponentInChildren<MeshRenderer>().material = secondaryMaterial;
+            visuals.GetComponentInChildren<MeshRenderer>().material = hiddenMaterial;
             if (occupant != null)
             {
                 occupant.SendMessage("SetVisible", false, SendMessageOptions.DontRequireReceiver);

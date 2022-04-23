@@ -14,6 +14,7 @@ public class Health : MonoBehaviour
         currentHealth = maxHealth;
     }
 
+    //used to test taking damage
     [ContextMenu("Damage")]
     void take5damage() { TakeDamage(20); }
 
@@ -22,7 +23,7 @@ public class Health : MonoBehaviour
         if (damage > 0)//if damage is a negative it is healing and not effected by armor
         {
             damage -= armor;
-            if (damage < 1) { damage = 1; }
+            if (damage < 1) { damage = 1; }//minimum damage dealt of 1
         }
         currentHealth -= damage;
         if(currentHealth <= 0) { currentHealth = 0; Die(); }
