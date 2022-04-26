@@ -9,6 +9,8 @@ public class UnitController : MonoBehaviour
     [SerializeField] float heightStep = .5f;
     [SerializeField] float unitHeight = 0f;
     [SerializeField] bool flyingUnit = false;
+    [SerializeField] float resourceCost = 30f;
+    [SerializeField] float rewardForKill = 5f;
     HexGrid hexGrid;
     HexCoordinates hexCoords;
     UnitCombatController combatController;
@@ -20,7 +22,8 @@ public class UnitController : MonoBehaviour
     List<Hex> path = new List<Hex>();
     
     [SerializeField] GameObject selected;
-    
+
+    bool isDead = false;
     
     private void Awake()
     {
@@ -30,8 +33,17 @@ public class UnitController : MonoBehaviour
         hexGrid = GameObject.FindGameObjectWithTag("Map").GetComponent<HexGrid>();
         combatController = this.GetComponent<UnitCombatController>();
         visionController = this.GetComponent<VisionController>();
-
-        if (!playerUnit) { visionController.SetVisible(false); }
+        if (currentHex == null)
+        {
+            LookForCurrentHex();
+        }
+        if (!playerUnit) {
+            if (currentHex == null)
+            {
+                visionController.SetVisible(false);
+            }
+            else { visionController.SetVisible(currentHex.IsVisible()); }
+        }
         else { Invoke("UpdateVision", 1f); }//updates vision once everything has been loaded
     }
    
@@ -39,17 +51,24 @@ public class UnitController : MonoBehaviour
     void Update()
     {
         if(currentHex == null) {
-            Hex temp;
-            if(hexGrid.GetHex(hexCoords.GetHexCoordsRQS(), out temp))
-            {
-                currentHex = temp;
-                currentHex.SetOccupent(this.gameObject);
-            }
+            LookForCurrentHex();
         }
         GoToTarget();
     }
+    private void LateUpdate()
+    {
+        if(currentHex.IsVisible() && !visionController.IsVisible())
+        {
+            visionController.SetVisible(true);
+        }
+        if (isDead)
+        {
+            if (playerUnit) { visionController.RemoveVision(); }
+            this.gameObject.SetActive(false);
+        }
+    }
 
-   
+
     void GoToTarget()
     {
         if(path == null) { return; }
@@ -64,14 +83,18 @@ public class UnitController : MonoBehaviour
                 targetHex = null;
                 path = null;
                 return;
+            }else if(target == null)
+            {
+                target = path[0].GetOccupant();
             }
             UpdatePath();
             return;
         }
         else
         {
-            path[0].SetOccupent(this.gameObject);
             currentHex.SetOccupent(null);
+            path[0].SetOccupent(this.gameObject);
+            currentHex = path[0];
         }
         Vector3 heightDiff = new Vector3(0, unitHeight, 0);
         if (Vector3.Distance(transform.position, path[0].GetTargetPoint() + heightDiff) > .05)
@@ -103,6 +126,7 @@ public class UnitController : MonoBehaviour
             UpdateVision();
         }
         
+        
 
         if (path.Count > 0)
         {
@@ -120,6 +144,7 @@ public class UnitController : MonoBehaviour
     void UpdateVision()
     {
         visionController.UpdateVision(heightStep, currentHex);
+
     }
     void MoveToHex(Hex destination)
     {
@@ -165,8 +190,8 @@ public class UnitController : MonoBehaviour
                     }
                 }
             }
-            targetHex = null;
-            path = null;
+            //targetHex = null;
+            //path = null;
         }
     }
 
@@ -180,8 +205,9 @@ public class UnitController : MonoBehaviour
     public void SetTargetEnemy(GameObject enemy)
     {
         if(enemy == null) { return; }
+        if(!enemy.activeInHierarchy) { return; }
         hexGrid.GetHex(enemy.GetComponentInParent<HexCoordinates>().GetHexCoordsRQS(), out targetHex);
-        targetHex = enemy.GetComponentInParent<UnitController>().GetcurrentHex();
+        //targetHex = enemy.GetComponentInParent<UnitController>().GetcurrentHex();
 
         LayerMask targetLayers = combatController.GetTargetLayers();
         if(targetLayers != (targetLayers & (1 << enemy.layer)) && targetHex != null) { SetTargetHex(targetHex); return; }
@@ -202,23 +228,62 @@ public class UnitController : MonoBehaviour
         {
             path = temp;
         }
-       
+        else
+        {
+            foreach (Hex h in hexGrid.GetNeighbours(targetHex))
+            {
+                if (h.GetOccupant() == null)
+                {
+                    if (hexGrid.FindPath(currentHex, h, this.gameObject, out temp, heightStep))
+                    {
+                        path = temp;
+                        return;
+                    }
+                }
+                else if (h.GetOccupant().Equals(enemy))
+                {
+                    if (hexGrid.FindPath(currentHex, h, this.gameObject, out temp, heightStep, enemyLayers, combatController.GetRange()))
+                    {
+                        path = temp;
+                        return;
+                    }
+                }
+                
+            }
+            targetHex = null;
+            path = null;
+        }
+
     }
 
 
 
     public void Dead()
     {
+        isDead = true;
         Debug.Log("unit is dead");
         currentHex.SetOccupent(null);
-        if (playerUnit) { visionController.RemoveVision(); }
-        this.gameObject.SetActive(false);
+        
+        if(!playerUnit)
+        {
+            GameObject.FindGameObjectWithTag("MainBase").GetComponent<MainBaseController>().AddResources(rewardForKill);
+            GameObject.FindGameObjectWithTag("EnemyAI").GetComponent<AIController>().RemoveUnit(this.gameObject);
+        }
+        
     }
 
-    
 
+    void LookForCurrentHex()
+    {
+        Hex temp;
+        if (hexGrid.GetHex(hexCoords.GetHexCoordsRQS(), out temp))
+        {
+            currentHex = temp;
+            currentHex.SetOccupent(this.gameObject);
+        }
+    }
     public Hex GetcurrentHex() { return currentHex; }
-    public bool isPlayerUnit() { return playerUnit; }
+    public bool IsPlayerUnit() { return playerUnit; }
     public LayerMask GetEnemyLayers() { return enemyLayers; }
 
     public bool IsEnemy(int layer) { return enemyLayers == (enemyLayers & (1 << layer)); }
@@ -233,6 +298,8 @@ public class UnitController : MonoBehaviour
         }
     }
     
+    public bool IsDead() { return isDead; }
+    public float GetResourceCost() { return resourceCost; }
     public bool IsVisible() { return visionController.IsVisible(); }
 
 }

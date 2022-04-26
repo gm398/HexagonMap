@@ -16,7 +16,7 @@ public class Hex : MonoBehaviour
 
     private bool isOccupied = false;
     [SerializeField] bool isVisible = false;
-    int seenBy = 0;
+    [SerializeField] int seenBy = 0;
     [SerializeField] GameObject occupant = null;
 
     [SerializeField] GameObject visuals;
@@ -116,15 +116,17 @@ public class Hex : MonoBehaviour
             if (occupant != null)
             {
                 occupant.SendMessage("SetVisible", false, SendMessageOptions.DontRequireReceiver);
+                //occupant.GetComponent<VisionController>().SetVisible(false);
             }
         }
-        else if (!isVisible)
+        else //if (!isVisible)
         {
             isVisible = true;
             visuals.GetComponentInChildren<MeshRenderer>().material = defaultMaterial;
             if(occupant != null)
             {
                 occupant.SendMessage("SetVisible", true, SendMessageOptions.DontRequireReceiver);
+               // occupant.GetComponent<VisionController>().SetVisible(true);
             }
         }
     }

@@ -9,15 +9,29 @@ public class PathFinding
     //the A* search algorithm
     public bool AStarSearch(HexGrid hexGrid, Hex start, Hex goal, out List<Hex> rout, float heightStep, GameObject unit, out Dictionary<Hex, Hex> visited, LayerMask enemyLayers, int range)
     {
-        
+        visited = null;
         Dictionary<Hex, Hex> VisitedHexs = new Dictionary<Hex, Hex>();
         Dictionary<Hex, Hex> cameFrom = new Dictionary<Hex, Hex>();
         Dictionary<Hex, float> costSoFar = new Dictionary<Hex, float>();
         HexQueue hexQueue = new HexQueue();
 
         UnitController controller = unit.GetComponentInParent<UnitController>();
-        bool canFly = controller.CanFly();
 
+        enemyLayers = controller.GetEnemyLayers();
+        bool canFly = controller.CanFly();
+        List<Hex> startNeighbours = hexGrid.GetNeighbours(start);
+        bool surrounded = true;
+        foreach(Hex h in startNeighbours)
+        {
+            if (!h.IsOccupied())
+            {
+                if(canFly || h.IsTraversable())
+                {
+                    surrounded = false;
+                }
+            }
+        }
+        if (surrounded) { rout = null; return false; }
         VisitedHexs.Add(start, start);
         cameFrom.Add(start, start);
         costSoFar.Add(start, 0);
@@ -44,11 +58,12 @@ public class PathFinding
                 float heightDiff = Mathf.Abs(nextHex.GetHexCoordinates().GetHeight() - currentHex.GetHexCoordinates().GetHeight());
                 if ((nextHex.IsTraversable() || canFly) 
                     && heightDiff <= heightStep 
-                    && (unit == null 
-                        || nextHex.GetOccupant() == null 
+                    && ((//unit == null 
+                        nextHex.GetOccupant() == null 
                         || nextHex.GetOccupant().Equals(unit)
                         || (enemyLayers == (enemyLayers & (1 << nextHex.GetOccupant().layer)))
                         )
+                        || !nextHex.IsVisible())
                     ) 
                 {
                     float newCost = costSoFar[currentHex];
@@ -102,6 +117,8 @@ public class PathFinding
         float distance = start.DistanceFromHex(goal);
         bool newHexFound = false;
         bool sucess = false;
+        
+
         List<Hex> neighbours = hexGrid.GetNeighbours(goal);
         if (!goal.IsTraversable())
         {

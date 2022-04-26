@@ -443,20 +443,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerUnit: 1
-  speed: 2
+  speed: 1
   heightStep: 0.5
   unitHeight: 0
   flyingUnit: 0
-  visionRange: 3
+  resourceCost: 30
+  rewardForKill: 5
   currentHex: {fileID: 0}
   enemyLayers:
     serializedVersion: 2
     m_Bits: 512
-  visibleComponents:
-  - {fileID: 1292655337744668650}
-  - {fileID: 4753714230990683816}
-  - {fileID: 3057759319106756262}
-  - {fileID: 3756398501358784859}
   selected: {fileID: 8105948838608793941}
 --- !u!114 &3039745322124751306
 MonoBehaviour:
@@ -503,6 +499,7 @@ MonoBehaviour:
   attackSpeed: 1
   damage: 10
   healer: 0
+  canAttackAir: 1
   canAttack: 1
   target: {fileID: 0}
 --- !u!114 &1760412095488897884
@@ -517,6 +514,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93366c1f2fbe56a46b042921a054c9a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  visionRange: 3
+  visionHeightStep: 0.5
   visibleComponents:
   - {fileID: 1292655337744668650}
   - {fileID: 4753714230990683816}

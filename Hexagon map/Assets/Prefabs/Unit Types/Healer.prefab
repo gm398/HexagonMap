@@ -94,6 +94,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Unit
       objectReference: {fileID: 0}
+    - target: {fileID: 7495523256469156794, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
+      propertyPath: resourceCost
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 8124406457484712674, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
       propertyPath: range
       value: 2

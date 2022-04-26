@@ -18,17 +18,14 @@ public class BoxSelector : MonoBehaviour
                 UnitController controller = c.GetComponentInParent<UnitController>();
                 if (controller != null)
                 {
-                    if (controller.isPlayerUnit())
+                    if (controller.IsPlayerUnit())
                     {
                         Debug.Log("unit added");
                         found.Add(controller.gameObject);
                     }
-
                 }
             }
         }
-
         return found;
     }
-    
 }

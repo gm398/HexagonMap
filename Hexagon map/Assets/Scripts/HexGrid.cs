@@ -33,14 +33,14 @@ public class HexGrid : MonoBehaviour
     
     public bool FindPath(Hex start, Hex goal, GameObject unit, out List<Hex> rout, float heightStep)
     {
-        if(start == null || goal == null || start == goal) { rout = null; return false; }
+        if(start == null || goal == null || start == goal || !unit.activeInHierarchy) { rout = null; return false; }
         Dictionary<Hex, Hex> visited;
         return pathFinder.AStarSearch(this, start, goal, out rout, heightStep, unit, out visited, -1, 0);
     }
     
     public bool FindPath(Hex start, Hex goal, GameObject unit, out List<Hex> rout, float heightStep, LayerMask enemyLayers, int range)
     {
-        if (start == null || goal == null || start == goal) { rout = null; return false; }
+        if (start == null || goal == null || start == goal || !unit.activeInHierarchy) { rout = null; return false; }
         Dictionary<Hex, Hex> visited;
         return pathFinder.AStarSearch(this, start, goal, out rout, heightStep, unit, out visited, enemyLayers, range);
     }

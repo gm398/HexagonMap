@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 // tutorial
 //https://www.youtube.com/watch?v=WGo07dMJPtk
 
@@ -40,9 +41,10 @@ public class SelectionManager : MonoBehaviour
     private void Update()
     {
         DetectMouseClick();
+    }
+    private void LateUpdate()
+    {
         HighlightHoveredHex();
-
-
     }
 
     void HighlightHoveredHex()
@@ -129,19 +131,30 @@ public class SelectionManager : MonoBehaviour
         GameObject result;
         if (FindTarget(mousePosition, out result) && !Input.GetKey(KeyCode.Mouse3))
         {
+            
+
             //hexGrid.RevertHexs();//resets all the hexes click states
             currentHex = null;
+
+            //if shift is not held then the current selection is cleared
             if (!(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)))
             {
                 foreach(GameObject s in currentSelection)
                 {
                     UnitController uc = s.GetComponentInParent<UnitController>();
-                    if(uc != null) { uc.SetSelected(false); }
+                    if (uc != null) { uc.SetSelected(false); }
+                    else
+                    {
+                        MainBaseController bs = s.GetComponentInParent<MainBaseController>();
+                        if (bs != null) { bs.SetSelected(false); }
+                    }
+
                 }
                 currentSelection.Clear();
             }
 
             UnitController unitController = result.GetComponentInParent<UnitController>();
+            MainBaseController baseController = result.GetComponentInParent<MainBaseController>();
             Hex targetHex = result.GetComponentInParent<Hex>();
             if (targetHex != null)
             {
@@ -153,10 +166,18 @@ public class SelectionManager : MonoBehaviour
             }
             else if(unitController != null)
             {
-                if (unitController.isPlayerUnit())
+                if (unitController.IsPlayerUnit())
                 {
                     currentSelection.Add(result);
                     unitController.SetSelected(true);
+                }
+            }
+            else if(baseController != null)
+            {
+                if (baseController.IsPlayerUnit())
+                {
+                    currentSelection.Add(result);
+                    baseController.SetSelected(true);
                 }
             }
             else { Debug.Log("not a valid selection"); }
@@ -182,25 +203,34 @@ public class SelectionManager : MonoBehaviour
                     {
                         if (selected.activeInHierarchy)
                         {
+
+                            
                             UnitController controller = selected.GetComponentInParent<UnitController>();
-                            if (enemyController != null)
+                            
+                            
+                            if (controller != null)
                             {
                                 controller.SetTargetEnemy(result);
-                            }
-                            else if (targetHex != null)
-                            {
-                                int targetLayer = -1;
-                                GameObject enemy = targetHex.GetOccupant();
-                                if (enemy != null) { targetLayer = enemy.layer; }
-                                if (controller.IsEnemy(targetLayer))
+                                /*
+                                if (enemyController != null)
                                 {
-                                    controller.SetTargetEnemy(enemy);
+                                    controller.SetTargetEnemy(result);
                                 }
-                                else
-
+                                else if (targetHex != null)
                                 {
-                                    controller.SetTargetHex(targetHex);
-                                }
+                                    
+                                    int targetLayer = -1;
+                                    GameObject enemy = targetHex.GetOccupant();
+                                    if (enemy != null) { targetLayer = enemy.layer; }
+                                    if (controller.IsEnemy(targetLayer))
+                                    {
+                                        controller.SetTargetEnemy(enemy);
+                                    }
+                                    else
+                                    {
+                                        controller.SetTargetHex(targetHex);
+                                    }
+                                }*/
                             }
                         }
                     }
@@ -271,8 +301,12 @@ public class SelectionManager : MonoBehaviour
         Ray ray = mainCamers.ScreenPointToRay(mousePosition);
         if(Physics.Raycast(ray, out hit, selectionMask))
         {
-            result = hit.collider.gameObject;
-            return true;
+            GameObject tempResult = hit.collider.gameObject;
+            if(!IsPointerOverUIObject())
+            {
+                result = tempResult;
+                return true;
+            }
         }
         result = null;
         return false;
@@ -288,5 +322,28 @@ public class SelectionManager : MonoBehaviour
         }
         mousePoint = new Vector3();
         return false;
+    }
+
+
+
+    //checks to see if the mouse is over a UI element other than the healthbars
+    //slightly modified from this code:
+    //https://answers.unity.com/questions/967170/detect-if-pointer-is-over-any-ui-element.html
+    //Answer by SkylinR · Jul 07, 2020 at 09:33 AM
+    public static bool IsPointerOverUIObject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        int modifyer = 0;
+        foreach(RaycastResult r in results)
+        {
+            if (r.gameObject.tag.Equals("HealthBar"))
+            {
+                modifyer++;
+            }
+        }
+        return results.Count - modifyer > 0;
     }
 }

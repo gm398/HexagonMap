@@ -26,18 +26,24 @@ public class VisionController : MonoBehaviour
     public void UpdateVision(float height, Hex currentHex)
     {
         List<Hex> newVision = hexGrid.GetHexesInRange(visionRange, currentHex);
-        RemoveVision();
-        visibleHexes.Clear();
-        visibleHexes.TrimExcess();
-
+        List<Hex> invalidVision = new List<Hex>();
         foreach (Hex h in newVision)
         {
             if (h.transform.position.y < transform.position.y + height)
             {
                 h.SetVisible(true);
-                visibleHexes.Add(h);
+                //visibleHexes.Add(h);
             }
-        }
+            else
+            {
+                invalidVision.Add(h);
+            }
+        }foreach(Hex h in invalidVision) { newVision.Remove(h); }
+        RemoveVision();
+        visibleHexes.Clear();
+        visibleHexes.TrimExcess();
+        newVision.TrimExcess();
+        visibleHexes = newVision;
     }
     public void RemoveVision()
     {
@@ -49,10 +55,12 @@ public class VisionController : MonoBehaviour
     
     public void SetVisible(bool isVis)
     {
+        if(isVisible == isVis) { return; }
         foreach (GameObject c in visibleComponents)
         {
             c.SetActive(isVis);
             isVisible = isVis;
+            Debug.Log("invis: " + isVis);
         }
 
     }

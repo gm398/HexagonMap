@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainBaseController : MonoBehaviour
 {
@@ -12,9 +13,25 @@ public class MainBaseController : MonoBehaviour
     Hex centerHex;
     VisionController visionController;
 
-    [SerializeField] List<GameObject> spawnableUnits;
+    [SerializeField] List<GameObject> selectedParts;
     [SerializeField] int spawnRange = 2;
-    
+
+    [SerializeField] float resources = 0;
+    [SerializeField] float maxResources = 500;
+    [SerializeField] float resourcesPerSecond = 5f;
+    [SerializeField] Text resourceText;
+    [SerializeField] GameObject resourceDisplay;
+    GameObject currentUnitToSpawn;
+
+    [SerializeField] GameObject normalUnit;
+    [SerializeField] Text normalResourceText;
+    [SerializeField] GameObject tankUnit;
+    [SerializeField] Text tankResourceText;
+    [SerializeField] GameObject flyingUnit;
+    [SerializeField] Text flyingResourceText;
+    [SerializeField] GameObject healerUnit;
+    [SerializeField] Text healerResourceText;
+
 
     private void Awake()
     {
@@ -24,8 +41,17 @@ public class MainBaseController : MonoBehaviour
         hexGrid = GameObject.FindGameObjectWithTag("Map").GetComponent<HexGrid>();
         visionController = this.GetComponent<VisionController>();
             
-        if (!playerUnit) { visionController.SetVisible(false); }
+        if (!playerUnit) { visionController.SetVisible(false); resourceDisplay.SetActive(false); }
         else { Invoke("UpdateVision", 1f); }//updates vision once everything has been loaded
+
+        normalResourceText.text = "Standard: " 
+            + normalUnit.GetComponentInChildren<UnitController>().GetResourceCost().ToString("F0");
+        tankResourceText.text = "Tank: "
+            + tankUnit.GetComponentInChildren<UnitController>().GetResourceCost().ToString("F0");
+        flyingResourceText.text = "Flying: "
+            + flyingUnit.GetComponentInChildren<UnitController>().GetResourceCost().ToString("F0");
+        healerResourceText.text = "Healer: "
+            + healerUnit.GetComponentInChildren<UnitController>().GetResourceCost().ToString("F0");
     }
 
     // Update is called once per frame
@@ -35,30 +61,75 @@ public class MainBaseController : MonoBehaviour
         {
             CheckForCenterHex();
         }
+
+        
+        AddResources(resourcesPerSecond * Time.deltaTime);
+        
     }
 
-    [ContextMenu("testSpawn")]
-    public void SpawnUnit()
+
+    public GameObject SpawnUnit(GameObject unit)
     {
-        Hex temp = null;
-        foreach(Hex h in spawnZone)
+        if (unit != null)
         {
-            if (!h.IsOccupied())
+            currentUnitToSpawn = unit;
+            return SpawnUnit();
+        }
+        else { return null; }
+    }
+    [ContextMenu("testSpawn")]
+    public GameObject SpawnUnit()
+    {
+        UnitController unitController = currentUnitToSpawn.GetComponentInChildren<UnitController>();
+        if(unitController == null) { return null; }
+        float cost = unitController.GetResourceCost();
+        if (resources > cost)
+        {
+            AddResources(-cost);
+
+            Hex temp = null;
+            foreach (Hex h in spawnZone)
             {
-                temp = h;
+                if (!h.IsOccupied())
+                {
+                    temp = h;
+                }
+            }
+            if (temp != null)
+            {
+                return SpawnUnit(temp);
             }
         }
-        if(temp != null)
-        {
-            SpawnUnit(spawnableUnits[0], temp);
-        }
+        return null;
     }
 
-    public void SpawnUnit(GameObject unit, Hex target)
+    public GameObject SpawnUnit(Hex target)
     {
-        Instantiate(unit, target.GetTargetPoint(), Quaternion.identity);
+        return Instantiate(currentUnitToSpawn, target.GetTargetPoint(), Quaternion.identity);
+    }
+    
+    public void AddResources(float resources)
+    {
+        this.resources += resources;
+        if(this.resources > maxResources)
+        {
+            this.resources = maxResources;
+        }
+        if(this.resources < 0)
+        {
+            this.resources = 0;
+        }
+        resourceText.text = "Resources: " + this.resources.ToString("F0");
     }
 
+    public void SpawnNormalUnit() {
+        currentUnitToSpawn = normalUnit;
+        
+        SpawnUnit();
+    }
+    public void SpawnTankUnit() { currentUnitToSpawn = tankUnit; SpawnUnit(); }
+    public void SpawnFlyingUnit() { currentUnitToSpawn = flyingUnit; SpawnUnit(); }
+    public void SpawnHealerUnit() { currentUnitToSpawn = healerUnit; SpawnUnit(); }
     void CheckForCenterHex()
     {
         Hex temp;
@@ -84,6 +155,16 @@ public class MainBaseController : MonoBehaviour
         }
     }
     
+
+    public void SetSelected(bool isSelected)
+    {
+       
+        foreach(GameObject g in selectedParts)
+        {
+            g.SetActive(isSelected);
+        }
+        
+    }
     public void Dead()
     {
         foreach(Hex h in occupiedHexs)
@@ -91,10 +172,15 @@ public class MainBaseController : MonoBehaviour
             h.SetOccupent(null);
         }
         if (playerUnit) { visionController.RemoveVision(); }
+        GameObject.FindGameObjectWithTag("SceneChanger").GetComponent<SceneManagement>().EndGame();
         this.gameObject.SetActive(false);
     }
     void UpdateVision()
     {
         visionController.UpdateVision(centerHex);
     }
+
+    public bool IsPlayerUnit() { return playerUnit; }
+    public Hex GetCenterHex() { return centerHex; }
+    public int GetSpawnRange() { return spawnRange; }
 }
