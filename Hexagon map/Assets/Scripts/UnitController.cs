@@ -100,6 +100,7 @@ public class UnitController : MonoBehaviour
         if (Vector3.Distance(transform.position, path[0].GetTargetPoint() + heightDiff) > .05)
         {
             MoveToHex(path[0]);
+            if (!flyingUnit) { combatController.SetIsMoving(true); }
         }
         else
         {
@@ -121,6 +122,7 @@ public class UnitController : MonoBehaviour
         hexGrid.GetHex(hexCoords.GetHexCoordsRQS(), out currentHex);
         currentHex.SetOccupent(this.gameObject);
 
+        combatController.SetIsMoving(false);
         if (playerUnit)
         {
             UpdateVision();

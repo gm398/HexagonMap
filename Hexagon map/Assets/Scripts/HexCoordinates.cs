@@ -8,7 +8,7 @@ public class HexCoordinates : MonoBehaviour
     [SerializeField] Vector3 hexCoordinatesRQS;
     [SerializeField] Vector3 worldCoords;
 
-   
+    
     //converts the transforms coords into the hexagon coords
     public void ConvertToHexCords()
     {

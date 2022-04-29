@@ -94,6 +94,38 @@ PrefabInstance:
       propertyPath: m_Name
       value: Unit
       objectReference: {fileID: 0}
+    - target: {fileID: 6263032421064908652, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982112313011786131, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
+      propertyPath: effectedLocations.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982112313011786131, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
+      propertyPath: effectedLocations.Array.data[1].y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982112313011786131, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
+      propertyPath: effectedLocations.Array.data[1].z
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982112313011786131, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
+      propertyPath: effectedLocations.Array.data[2].y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982112313011786131, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
+      propertyPath: effectedLocations.Array.data[2].z
+      value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982112313011786131, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
+      propertyPath: effectedLocations.Array.data[3].y
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982112313011786131, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
+      propertyPath: effectedLocations.Array.data[3].z
+      value: -4
+      objectReference: {fileID: 0}
     - target: {fileID: 7495523256469156794, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
       propertyPath: resourceCost
       value: 10
@@ -102,6 +134,10 @@ PrefabInstance:
       propertyPath: range
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8124406457484712674, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
+      propertyPath: attackType
+      value: 
+      objectReference: {fileID: 5633624894269688839, guid: bd88876807e1991419066c6966f2a412, type: 3}
     - target: {fileID: 8795667539298310742, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

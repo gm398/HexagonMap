@@ -71,16 +71,21 @@ public class AIController : MonoBehaviour
     void SpawnUnit()
     {
         CheckUnitRatioPriorities();
+        
         if (totalUnits < populationCap)
         {
             GameObject newUnit = baseController.SpawnUnit(units[0].unit);
             if (newUnit != null)
             {
-                totalUnits++;
                 units[0].currentNumber++;
                 units[0].activeUnits.Add(newUnit);
                 activeUnits.Add(newUnit);
             }
+        }
+        totalUnits = 0;
+        foreach (PriorityUnit u in units)
+        {
+            totalUnits += (int)u.currentNumber;
         }
     }
 
@@ -166,7 +171,6 @@ public class AIController : MonoBehaviour
         {
             activeUnits.Remove(unit);
             activeUnits.TrimExcess();
-            totalUnits--;
         }
         foreach(PriorityUnit u in units)
         {
