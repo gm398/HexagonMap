@@ -16,8 +16,8 @@ public class SelectionManager : MonoBehaviour
     [SerializeField] Material selectionMaterial;
     [SerializeField] Material testMat;
 
-    private Hex currentHex;
-    private List<GameObject> currentSelection;
+    Hex currentHex;
+    [SerializeField] List<GameObject> currentSelection;
     bool isMouseDown = false;
     [SerializeField] float mouseHoldActivationTime = .02f;
     float mouseHeldTimer = 0;
@@ -28,6 +28,13 @@ public class SelectionManager : MonoBehaviour
 
 
     Hex hoveringHex = null;
+
+    [SerializeField] bool inRTSMode = true;
+    [SerializeField] List<GameObject> rtsPieces;
+    [SerializeField] List<GameObject> tppPieces;
+    UnitController currentDirectControl;
+    float switchPerspectiveCooldown = .2f;
+    float timeOfNextSwitch = 0f;
     private void Awake()
     {
         if(mainCamers == null)
@@ -40,7 +47,19 @@ public class SelectionManager : MonoBehaviour
 
     private void Update()
     {
-        DetectMouseClick();
+        if (!inRTSMode)
+        {
+            ClearSelected();
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                SwitchPerspectives();
+            }
+        }
+        else
+        {
+            DetectMouseClick();
+        }
+        
     }
     private void LateUpdate()
     {
@@ -55,6 +74,7 @@ public class SelectionManager : MonoBehaviour
             hoveringHex.HighlightHex(false);
             hoveringHex = null;
         }
+        if (!inRTSMode) { return; }
         if (FindTarget(Input.mousePosition, out hoveringOver))
         {
             Hex newHex = hoveringOver.GetComponentInParent<Hex>();
@@ -131,26 +151,13 @@ public class SelectionManager : MonoBehaviour
         GameObject result;
         if (FindTarget(mousePosition, out result) && !Input.GetKey(KeyCode.Mouse3))
         {
-            
-
             //hexGrid.RevertHexs();//resets all the hexes click states
             currentHex = null;
 
             //if shift is not held then the current selection is cleared
             if (!(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)))
             {
-                foreach(GameObject s in currentSelection)
-                {
-                    UnitController uc = s.GetComponentInParent<UnitController>();
-                    if (uc != null) { uc.SetSelected(false); }
-                    else
-                    {
-                        MainBaseController bs = s.GetComponentInParent<MainBaseController>();
-                        if (bs != null) { bs.SetSelected(false); }
-                    }
-
-                }
-                currentSelection.Clear();
+                ClearSelected();
             }
 
             UnitController unitController = result.GetComponentInParent<UnitController>();
@@ -211,26 +218,7 @@ public class SelectionManager : MonoBehaviour
                             if (controller != null)
                             {
                                 controller.SetTargetEnemy(result);
-                                /*
-                                if (enemyController != null)
-                                {
-                                    controller.SetTargetEnemy(result);
-                                }
-                                else if (targetHex != null)
-                                {
-                                    
-                                    int targetLayer = -1;
-                                    GameObject enemy = targetHex.GetOccupant();
-                                    if (enemy != null) { targetLayer = enemy.layer; }
-                                    if (controller.IsEnemy(targetLayer))
-                                    {
-                                        controller.SetTargetEnemy(enemy);
-                                    }
-                                    else
-                                    {
-                                        controller.SetTargetHex(targetHex);
-                                    }
-                                }*/
+                               
                             }
                         }
                     }
@@ -239,7 +227,22 @@ public class SelectionManager : MonoBehaviour
             
         }
     }
-    
+    void ClearSelected()
+    {
+        foreach (GameObject s in currentSelection)
+        {
+            UnitController uc = s.GetComponentInParent<UnitController>();
+            if (uc != null) { uc.SetSelected(false); }
+            else
+            {
+                MainBaseController bs = s.GetComponentInParent<MainBaseController>();
+                if (bs != null) { bs.SetSelected(false); }
+            }
+
+        }
+        currentSelection.Clear();
+        currentSelection.TrimExcess();
+    }
     private void MoveSelectinBox()
     {
         Vector3 newPosition = (mouseStart + mouseEnd)/2;
@@ -345,5 +348,46 @@ public class SelectionManager : MonoBehaviour
             }
         }
         return results.Count - modifyer > 0;
+    }
+
+
+
+    public void SwitchPerspectives()
+    {
+        //if(timeOfNextSwitch > Time.time) { return; }
+        if (inRTSMode)
+        {
+            List<UnitController> controllers = new List<UnitController>();
+            int count = 0;
+            UnitController controller = null;
+            currentSelection.TrimExcess();
+            foreach (GameObject g in currentSelection)
+            {
+                UnitController c = g.GetComponentInParent<UnitController>();
+                if (c != null)
+                {
+                    if (!controllers.Contains(c))
+                    {
+                        controllers.Add(c);
+                        controller = c;
+                        count++;
+                    }
+                    
+                }
+            }
+            if (count != 1) { return; }
+            currentDirectControl = controller;
+        }
+        currentDirectControl.TakeDirectControl(inRTSMode);
+        foreach(GameObject g in rtsPieces)
+        {
+            g.SetActive(!inRTSMode);
+        }
+        foreach(GameObject g in tppPieces)
+        {
+            g.SetActive(inRTSMode);
+        }
+        inRTSMode = !inRTSMode;
+        timeOfNextSwitch = Time.time + switchPerspectiveCooldown;
     }
 }

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -58,11 +58,13 @@
     <Compile Include="Assets\Scripts\ModularGuns\GunFaceTarget.cs" />
     <Compile Include="Assets\Scripts\HexGrid.cs" />
     <Compile Include="Assets\Scripts\PlayerInput.cs" />
+    <Compile Include="Assets\Scripts\ThirdPersonController.cs" />
     <Compile Include="Assets\Scripts\VisionController.cs" />
     <Compile Include="Assets\Scripts\Hex.cs" />
     <Compile Include="Assets\Scripts\HexDisply.cs" />
     <Compile Include="Assets\Scripts\CameraMovement.cs" />
     <Compile Include="Assets\Scripts\Target.cs" />
+    <Compile Include="Assets\Scripts\SceneManagement.cs" />
     <Compile Include="Assets\Scripts\SelectionManager.cs" />
     <Compile Include="Assets\Scripts\ModularGuns\GunController.cs" />
     <Compile Include="Assets\Scripts\mouseLook.cs" />
@@ -70,18 +72,19 @@
     <Compile Include="Assets\Scripts\ModularGuns\GunAmmoText.cs" />
     <Compile Include="Assets\Scripts\Billboard.cs" />
     <Compile Include="Assets\Scripts\UnitController.cs" />
+    <Compile Include="Assets\Scripts\AIController.cs" />
     <Compile Include="Assets\Scripts\MainBaseController.cs" />
     <Compile Include="Assets\Scripts\Health.cs" />
     <Compile Include="Assets\Scripts\BoxSelector.cs" />
     <Compile Include="Assets\Scripts\ModularGuns\GunSpread.cs" />
     <Compile Include="Assets\Scripts\UnitCombatController.cs" />
+    <Compile Include="Assets\Scripts\AttackType.cs" />
     <Compile Include="Assets\Scripts\ModularGuns\HitscanShot.cs" />
     <Compile Include="Assets\Scripts\HexCoordinates.cs" />
     <Compile Include="Assets\Scripts\ModularGuns\RBShot.cs" />
+    <Compile Include="Assets\Scripts\AttackShape.cs" />
     <Compile Include="Assets\Scripts\HealthBar.cs" />
     <Compile Include="Assets\Scripts\ModularGuns\GunAnimationController.cs" />
-    <Compile Include="Assets\Scripts\AIController.cs" />
-    <Compile Include="Assets\Scripts\SceneManagement.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -24,6 +24,12 @@ public class UnitController : MonoBehaviour
     [SerializeField] GameObject selected;
 
     bool isDead = false;
+
+    bool underDirectControl = false;
+    [Header("components to be enabled when the player takes direct control")]
+    [SerializeField] List<GameObject> playerComponents;
+    [Header("components to be disabled when the player takes direct control")]
+    [SerializeField] List<GameObject> nonPlayerComponents;
     
     private void Awake()
     {
@@ -45,6 +51,7 @@ public class UnitController : MonoBehaviour
             else { visionController.SetVisible(currentHex.IsVisible()); }
         }
         else { Invoke("UpdateVision", 1f); }//updates vision once everything has been loaded
+        TakeDirectControl(false);
     }
    
     // Update is called once per frame
@@ -53,7 +60,10 @@ public class UnitController : MonoBehaviour
         if(currentHex == null) {
             LookForCurrentHex();
         }
-        GoToTarget();
+        if (!underDirectControl)
+        {
+            GoToTarget();
+        }
     }
     private void LateUpdate()
     {
@@ -64,6 +74,7 @@ public class UnitController : MonoBehaviour
         if (isDead)
         {
             if (playerUnit) { visionController.RemoveVision(); }
+            currentHex.SetOccupent(null);
             this.gameObject.SetActive(false);
         }
     }
@@ -265,15 +276,49 @@ public class UnitController : MonoBehaviour
         isDead = true;
         Debug.Log("unit is dead");
         currentHex.SetOccupent(null);
-        
-        if(!playerUnit)
+
+        if (!playerUnit)
         {
-            GameObject.FindGameObjectWithTag("MainBase").GetComponent<MainBaseController>().AddResources(rewardForKill);
-            GameObject.FindGameObjectWithTag("EnemyAI").GetComponent<AIController>().RemoveUnit(this.gameObject);
+            GameObject mainBase = GameObject.FindGameObjectWithTag("MainBase");
+            if (mainBase != null)
+            {
+                mainBase.GetComponent<MainBaseController>().AddResources(rewardForKill);
+            }
+            GameObject enemyAI = GameObject.FindGameObjectWithTag("EnemyAI");
+            if (enemyAI != null)
+            {
+                enemyAI.GetComponent<AIController>().RemoveUnit(this.gameObject);
+            }
+        }
+       
+        if (underDirectControl)
+        {
+            GameObject.FindGameObjectWithTag("SelectionSystem").GetComponent<SelectionManager>().SwitchPerspectives();
         }
         
     }
 
+    public void TakeDirectControl(bool control)
+    {
+        underDirectControl = control;
+        foreach(GameObject g in playerComponents)
+        {
+            g.SetActive(control);
+        }
+        foreach(GameObject g in nonPlayerComponents)
+        {
+            g.SetActive(!control);
+        }
+        combatController.TakeDirectControl(control);
+        this.GetComponent<ThirdPersonController>().SetDirectControl(control);
+        if (!control)
+        {
+            if (currentHex != null)
+            {
+                SetTargetHex(currentHex);
+            }
+        }
+    }
 
     void LookForCurrentHex()
     {
@@ -299,9 +344,17 @@ public class UnitController : MonoBehaviour
             selected.SetActive(isSelected);
         }
     }
+    public void SetCurrentHex(Hex hex)
+    {
+        currentHex.SetOccupent(null);
+        currentHex = hex;
+        currentHex.SetOccupent(this.gameObject);
+    }
     
     public bool IsDead() { return isDead; }
     public float GetResourceCost() { return resourceCost; }
     public bool IsVisible() { return visionController.IsVisible(); }
+    public float GetSpeed() { return speed; }
+    public float GetHeightStep() { return heightStep; }
 
 }

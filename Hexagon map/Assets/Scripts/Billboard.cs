@@ -15,6 +15,10 @@ public class Billboard : MonoBehaviour
     }
     private void LateUpdate()
     {
+        if (!cam.gameObject.activeInHierarchy)
+        {
+            cam = GameObject.FindGameObjectWithTag("MainCamera").transform;
+        }
         transform.LookAt(transform.position + cam.forward);
     }
 }

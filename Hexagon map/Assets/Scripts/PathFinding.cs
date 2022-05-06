@@ -14,11 +14,18 @@ public class PathFinding
         Dictionary<Hex, Hex> cameFrom = new Dictionary<Hex, Hex>();
         Dictionary<Hex, float> costSoFar = new Dictionary<Hex, float>();
         HexQueue hexQueue = new HexQueue();
+        bool canFly = false;
 
-        UnitController controller = unit.GetComponentInParent<UnitController>();
-
-        enemyLayers = controller.GetEnemyLayers();
-        bool canFly = controller.CanFly();
+        UnitController controller = null;
+        if (unit != null)
+        {
+            unit.GetComponentInParent<UnitController>();
+        }
+        if (controller != null)
+        {
+            enemyLayers = controller.GetEnemyLayers();
+            canFly = controller.CanFly();
+        }
         List<Hex> startNeighbours = hexGrid.GetNeighbours(start);
         bool surrounded = true;
         foreach(Hex h in startNeighbours)

@@ -6,6 +6,12 @@ TagManager:
   tags:
   - Map
   - Target
+  - HealthBar
+  - EnemyBase
+  - UI
+  - EnemyAI
+  - MainBase
+  - SelectionSystem
   layers:
   - Default
   - TransparentFX

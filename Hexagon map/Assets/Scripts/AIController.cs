@@ -8,6 +8,8 @@ public class AIController : MonoBehaviour
 {
     [SerializeField] GameObject mainBase;
     [SerializeField] int populationCap = 20;
+    [SerializeField] int populationToAttackWith = 15;
+    [SerializeField] int populationToRetreatWith = 5;
     [SerializeField] float commandsPerSecond = 1;
     float timer = 0;
     [SerializeField]
@@ -42,10 +44,10 @@ public class AIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        SpawnUnit();
-        DecideTactic();
         if (timer >= 1 / commandsPerSecond)
         {
+            SpawnUnit();
+            DecideTactic();
             AssignTarget();
             timer = 0;
         }
@@ -61,8 +63,7 @@ public class AIController : MonoBehaviour
                 u.currentPrio = (u.idealRatio / ratioTotal) - (u.currentNumber / totalUnits);
             }
             else { u.currentPrio = u.idealRatio / ratioTotal; }
-            if(u.maxNum <= u.currentNumber && u.maxNum > 0) { u.currentPrio = 10; }
-            //u.currentPrio = .5f;
+            if(u.maxNum <= u.currentNumber && u.maxNum > 0) { u.currentPrio = 10; }//low priority if the maximum number has been reached
         }
         units.Sort((u1, u2) => u2.currentPrio.CompareTo(u1.currentPrio));
     }
@@ -91,8 +92,8 @@ public class AIController : MonoBehaviour
 
     void DecideTactic()
     {
-        if(totalUnits > populationCap / 1.3 && !shouldAttack) { shouldAttack = true; }
-        else if(totalUnits < populationCap / 4 && shouldAttack){ shouldAttack = false; }
+        if(totalUnits >= populationToAttackWith && !shouldAttack) { shouldAttack = true; }
+        else if(totalUnits <= populationToRetreatWith && shouldAttack){ shouldAttack = false; }
     }
 
 
@@ -190,12 +191,11 @@ public class AIController : MonoBehaviour
         public float idealRatio;
         [Header("negative for no limit")]
         public float maxNum = -1;
-        public float currentNumber;
         public List<GameObject> activeUnits = new List<GameObject>();
+        [HideInInspector]
+        public float currentNumber;
         //[HideInInspector]
         public float currentPrio;
-
-        
     }
     
 }

@@ -8,28 +8,30 @@ public class UnitCombatController : MonoBehaviour
     [SerializeField] int range = 1;
     [SerializeField] bool rangedUnit = false;
     [SerializeField] float attackSpeed = 1f;
-    [SerializeField] float damage = 10;
-    [SerializeField] bool healer = false;
+    //[SerializeField] float damage = 10;
+    bool healer = false;
     [SerializeField] bool canAttackAir = true;
     
     LayerMask enemyLayers;
-    [SerializeField] bool canAttack = true;
-    [SerializeField] bool isMoving = false;
+    bool canAttack = true;
+    bool isMoving = false;
     [SerializeField] GameObject target;
     bool canCheckTarget = true;
 
     HexGrid hexGrid;
     UnitController controller;
 
+    [SerializeField] GameObject attackTypeObject;
+    AttackType attackType;
 
-    [SerializeField] AttackType attackType;
+    bool underDirectControll = false;
 
     private void Awake()
     {
 
         hexGrid = GameObject.FindGameObjectWithTag("Map").GetComponent<HexGrid>();
         controller = this.gameObject.GetComponent<UnitController>();
-        GameObject attackTypeObject = Instantiate(attackType.gameObject);
+        GameObject attackTypeObject = Instantiate(this.attackTypeObject);
         attackTypeObject.transform.parent = this.transform;
         attackType = attackTypeObject.GetComponent<AttackType>();
         healer = attackType.IsHeal();
@@ -46,14 +48,17 @@ public class UnitCombatController : MonoBehaviour
             range = attackType.GetMaxRange();
         }
         if(range < 1) { range = 1; }
+        canAttack = false;
+        Invoke("ResetAttack", 1);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(canAttack && !isMoving)
+        if (underDirectControll) { return; }
+        
+        if (canAttack && !isMoving)
         {
-            //AimAtTarget();
             UseAttackShape();
         }
         if (canCheckTarget)
@@ -61,9 +66,10 @@ public class UnitCombatController : MonoBehaviour
             Invoke("CheckTarget", 1f);
             canCheckTarget = false;
         }
+        
     }
 
-
+    /*old combat method
     void AimAtTarget()
     {
      
@@ -139,7 +145,7 @@ public class UnitCombatController : MonoBehaviour
 
         } //else {Debug.Log("no closest"); }
     }
-
+    */
 
 
     void UseAttackShape()
@@ -154,19 +160,30 @@ public class UnitCombatController : MonoBehaviour
                 ChooseClosestTarget(enemys, out GameObject target);
                 if(target != null)
                 {
-                    Vector3 centerOfAttack = target.GetComponentInChildren<HexCoordinates>().GetHexCoordsRQS();
-                    List<GameObject> targetsHit = attackType.Attack(centerOfAttack, new Vector3(0,0,0), this.gameObject.layer);
+                    Vector3 centerOfAttack = target.GetComponentInParent<HexCoordinates>().GetHexCoordsRQS();
+                    if(hexGrid.GetHex(centerOfAttack, out Hex h))
+                    {
+                        if (h.IsVisible())
+                        {
+                            List<GameObject> targetsHit = attackType.Attack(centerOfAttack, new Vector3(0,0,0), enemyLayers, canAttackAir);
+                            if (targetsHit.Count > 0)
+                            {
+                                Invoke("ResetAttack", 1 / attackSpeed);
+                                canAttack = false;
+                            }
+                        }
+                    }
+                    
                 }
             }
             else
             {
                 Vector3 currentHexCoords = controller.GetcurrentHex().GetHexCoordinates().GetHexCoordsRQS();
-                int rotations = attackType.CanHit(currentHexCoords, enemyLayers);
-                if (rotations >= 0)
+                List<int> rotations = attackType.CanHit(currentHexCoords, enemyLayers, canAttackAir);
+                if (rotations.Count > 0)
                 {
-                    if (attackType == null) { Debug.Log("attacktype null"); }
-                    LayerMask layer = this.gameObject.layer;
-                    List<GameObject> targetsHit = attackType.Attack(currentHexCoords, rotations, layer);
+                    int rotation = rotations.ToArray()[Random.Range((int)0, (int)rotations.Count)];
+                    List<GameObject> targetsHit = attackType.Attack(currentHexCoords, rotation, enemyLayers, canAttackAir);
                     if (targetsHit.Count > 0)
                     {
                         Invoke("ResetAttack", 1 / attackSpeed);
@@ -183,13 +200,13 @@ public class UnitCombatController : MonoBehaviour
         hexGrid.GetHex(currentCoords, out Hex currentHex);
         foreach (Collider c in enemys)
         {
-            if(c.gameObject.GetComponentInChildren<Health>() != null)
+            if(c.gameObject.GetComponentInParent<Health>() != null)
             {
                 if(closest == null) { closest = c.gameObject; }
                 else
                 {
-                    HexCoordinates hexCoords = c.gameObject.GetComponentInChildren<HexCoordinates>();
-                    HexCoordinates closestCoords = closest.GetComponentInChildren<HexCoordinates>();
+                    HexCoordinates hexCoords = c.gameObject.GetComponentInParent<HexCoordinates>();
+                    HexCoordinates closestCoords = closest.GetComponentInParent<HexCoordinates>();
                     
                     if(hexCoords != null && closestCoords != null)
                     {
@@ -204,7 +221,7 @@ public class UnitCombatController : MonoBehaviour
             }
         }
         if(closest == null) { return false; }
-        hexGrid.GetHex(closest.GetComponentInChildren<HexCoordinates>().GetHexCoordsRQS(), out Hex targetHex);
+        hexGrid.GetHex(closest.GetComponentInParent<HexCoordinates>().GetHexCoordsRQS(), out Hex targetHex);
         if(currentHex.DistanceFromHex(targetHex) > range)
         {
             closest = null;
@@ -248,8 +265,7 @@ public class UnitCombatController : MonoBehaviour
     }
 
 
-    public GameObject GetTarget() { return target; }
-    public int GetRange() { return range; }
+    
     public bool EnemyInRange()
     {
         Hex currentHex = controller.GetcurrentHex();
@@ -264,7 +280,18 @@ public class UnitCombatController : MonoBehaviour
         return false;
     }
 
+    public void TakeDirectControl(bool controll)
+    {
+        underDirectControll = controll;
+    }
+
+    public GameObject GetTarget() { return target; }
+    public int GetRange() { return range; }
+    public AttackType GetAttackType() { return attackType; }
     public void SetIsMoving(bool isMoving) { this.isMoving = isMoving; }
     public bool IsHealer() { return healer; }
+    public bool IsRanged() { return rangedUnit; }
+    public bool CanAttackAir() { return canAttackAir; }
+    public float GetAttackSpeed() { return attackSpeed; }
     public LayerMask GetTargetLayers() { return enemyLayers; }
 }

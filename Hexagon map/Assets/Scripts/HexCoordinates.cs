@@ -16,12 +16,14 @@ public class HexCoordinates : MonoBehaviour
         float z = transform.position.z;
 
         hexCoordinatesRQS.x = Mathf.RoundToInt(-z / .866f);
-        //s = Mathf.RoundToInt((-r - x / .5f) / 2);
         hexCoordinatesRQS.y = Mathf.RoundToInt((-hexCoordinatesRQS.x + x / .5f) / 2);
         hexCoordinatesRQS.z = -hexCoordinatesRQS.y - hexCoordinatesRQS.x;
+
+        /*used to display the hex coodanates on the hexagons for testing
+         * 
         if (this.GetComponent<HexDisply>() != null) {
             this.GetComponent<HexDisply>().SetText(hexCoordinatesRQS);
-        }
+        }*/
         
     }
     public Vector3 ConvertToGridCords()

@@ -308,6 +308,7 @@ MonoBehaviour:
   moveDificulty: 1
   targetPoint: {fileID: 8170540258961613958}
   isVisible: 0
+  seenBy: 0
   occupant: {fileID: 0}
   visuals: {fileID: 1702469753889210453}
   defaultMaterial: {fileID: 0}
@@ -353,7 +354,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.45
+      value: 0.47
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_LocalScale.y
@@ -361,7 +362,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.45
+      value: 0.47
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -433,7 +434,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 146a00d6d1cf6094db8b4f9195b0086b, type: 2}
     - target: {fileID: 919132149155446097, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_Name
-      value: Hexagon
+      value: top
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_Layer
@@ -553,10 +554,10 @@ PrefabInstance:
     - target: {fileID: -7635826562936255635, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 29ad29cd78584aa49bd4a77ae7f9488c, type: 2}
+      objectReference: {fileID: 2100000, guid: 658475df29d1b7d4fb5bd3e030be7be2, type: 2}
     - target: {fileID: 919132149155446097, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_Name
-      value: Hexagon (1)
+      value: Body
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: de3e3c9ee02405e4cb557caa2d7fdacd, type: 3}
       propertyPath: m_IsActive
