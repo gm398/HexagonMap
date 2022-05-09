@@ -61,7 +61,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: bff6aa1919c74ce45b1d207343e3f288, type: 2}
     - target: {fileID: 4168364751516399979, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
       propertyPath: armor
-      value: 8
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4168364751516399979, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
       propertyPath: maxHealth
@@ -77,7 +77,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7495523256469156794, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
       propertyPath: resourceCost
-      value: 70
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8124406457484712674, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
+      propertyPath: attackSpeed
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8124406457484712674, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
       propertyPath: attackTypeObject

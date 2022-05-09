@@ -19,7 +19,7 @@ public class PathFinding
         UnitController controller = null;
         if (unit != null)
         {
-            unit.GetComponentInParent<UnitController>();
+            controller = unit.GetComponentInParent<UnitController>();
         }
         if (controller != null)
         {

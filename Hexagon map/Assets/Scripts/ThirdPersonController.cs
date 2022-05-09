@@ -43,7 +43,7 @@ public class ThirdPersonController : MonoBehaviour
         hexCoords = this.gameObject.GetComponent<HexCoordinates>();
         hexGrid = GameObject.FindGameObjectWithTag("Map").GetComponent<HexGrid>();
         speed = unitController.GetSpeed();
-        jumpHeight = unitController.GetHeightStep() + .3f;
+        jumpHeight = unitController.GetHeightStep() + -.1f;
     }
     // Update is called once per frame
     void Update()
@@ -90,7 +90,8 @@ public class ThirdPersonController : MonoBehaviour
         {
             ShowTargeting(hexCoords.GetHexCoordsRQS());
         }
-        
+        Cursor.lockState = CursorLockMode.Locked;
+
     }
     void CheckCurrentHex()
     {
@@ -110,7 +111,7 @@ public class ThirdPersonController : MonoBehaviour
                 {
                     current.SetOccupent(this.gameObject);
                     unitController.SetCurrentHex(current);
-                    this.GetComponent<VisionController>().UpdateVision(current);
+                    unitController.UpdateVision();
                 }
                 else if(!this.gameObject.Equals(current.GetOccupant()))
                 {
@@ -241,5 +242,6 @@ public class ThirdPersonController : MonoBehaviour
         canAttackAir = combatcontroller.CanAttackAir();
         attackSpeed = combatcontroller.GetAttackSpeed();
         this.transform.rotation = Quaternion.identity;
+        
     }
 }

@@ -29,7 +29,7 @@ public class VisionController : MonoBehaviour
         List<Hex> invalidVision = new List<Hex>();
         foreach (Hex h in newVision)
         {
-            if (h.transform.position.y < transform.position.y + height)
+            if (h.transform.position.y <= currentHex.transform.position.y + height)
             {
                 h.SetVisible(true);
                 //visibleHexes.Add(h);

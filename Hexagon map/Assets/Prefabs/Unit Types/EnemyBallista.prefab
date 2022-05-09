@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &417115152356315380
+--- !u!1001 &8893887900503612103
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -53,23 +53,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3977909169234094950, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
       propertyPath: armor
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 3977909169234094950, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
-      propertyPath: maxHealth
-      value: 200
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4488814483083410071, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 29ad29cd78584aa49bd4a77ae7f9488c, type: 2}
+      objectReference: {fileID: 2100000, guid: af6f30416426e8147a7cc0bda6b04a0a, type: 2}
     - target: {fileID: 5103229582248272901, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
       propertyPath: m_Name
-      value: EnemyTank
+      value: EnemyBallista
       objectReference: {fileID: 0}
     - target: {fileID: 7415225474266603959, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
       propertyPath: speed
-      value: 0.5
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 7415225474266603959, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
       propertyPath: resourceCost
@@ -84,12 +80,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9102599861241858287, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
-      propertyPath: canAttackAir
-      value: 0
+      propertyPath: range
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9102599861241858287, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
+      propertyPath: rangedUnit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9102599861241858287, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
+      propertyPath: attackSpeed
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 9102599861241858287, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
       propertyPath: attackTypeObject
       value: 
-      objectReference: {fileID: 6407310750169638633, guid: 8de395a566838974b8c988b07458a600, type: 3}
+      objectReference: {fileID: 356844474344602094, guid: 77d9db819e7215b4998a216dbebfce8b, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}

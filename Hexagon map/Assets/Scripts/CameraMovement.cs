@@ -26,7 +26,8 @@ public class CameraMovement : MonoBehaviour
 
     void GetInputs()
     {
-        Cursor.lockState = CursorLockMode.Confined;
+        
+
         float mouseX = -Input.GetAxis("Mouse X");
         float mouseY = -Input.GetAxis("Mouse Y");
         bool middleMouse = Input.GetKey("mouse 2");
@@ -50,6 +51,7 @@ public class CameraMovement : MonoBehaviour
             //this.transform.Rotate(new Vector3(0, mouseX, 0), Space.World);
             this.transform.RotateAround(rotationPoint, Vector3.up, mouseX);
         }
+        else { Cursor.lockState = CursorLockMode.Confined; }
 
 
 

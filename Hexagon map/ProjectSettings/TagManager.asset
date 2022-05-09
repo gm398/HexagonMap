@@ -12,6 +12,7 @@ TagManager:
   - EnemyAI
   - MainBase
   - SelectionSystem
+  - SceneChanger
   layers:
   - Default
   - TransparentFX

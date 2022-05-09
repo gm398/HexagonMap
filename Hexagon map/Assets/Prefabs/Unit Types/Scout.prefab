@@ -87,6 +87,10 @@ PrefabInstance:
       propertyPath: flyingUnit
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7495523256469156794, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
+      propertyPath: heightStep
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8124406457484712674, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
       propertyPath: range
       value: 2
@@ -97,12 +101,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8124406457484712674, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
       propertyPath: attackSpeed
-      value: 1.5
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 8124406457484712674, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
       propertyPath: attackTypeObject
       value: 
-      objectReference: {fileID: 7711470330880027341, guid: 828dc4984a3468e4b91ff84f4e9e5002, type: 3}
+      objectReference: {fileID: 1603726789600599780, guid: 19e0c659ae84ca24bbbbc483b365ef4f, type: 3}
     - target: {fileID: 8795667539298310742, guid: d6fc4902a497a594293c49a3e86cfa69, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

@@ -154,7 +154,7 @@ public class UnitController : MonoBehaviour
     }
 
    
-    void UpdateVision()
+    public void UpdateVision()
     {
         visionController.UpdateVision(heightStep, currentHex);
 

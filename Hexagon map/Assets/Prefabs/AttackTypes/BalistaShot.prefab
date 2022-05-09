@@ -13,12 +13,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5633624894269688839, guid: bd88876807e1991419066c6966f2a412, type: 3}
       propertyPath: damage
-      value: 214
+      value: 140
       objectReference: {fileID: 0}
     - target: {fileID: 5633624894269688839, guid: bd88876807e1991419066c6966f2a412, type: 3}
       propertyPath: attackShapeObject
       value: 
-      objectReference: {fileID: 5866488226273677200, guid: 01b6beaf3d7a73042b1dbf96bdbe7d78, type: 3}
+      objectReference: {fileID: 548316755548078619, guid: ae9adfd79f26eaf41865beafe8680e7d, type: 3}
     - target: {fileID: 8257285013967311260, guid: bd88876807e1991419066c6966f2a412, type: 3}
       propertyPath: m_RootOrder
       value: 0

@@ -12,6 +12,10 @@ PrefabInstance:
       value: RangedSingle
       objectReference: {fileID: 0}
     - target: {fileID: 5633624894269688839, guid: bd88876807e1991419066c6966f2a412, type: 3}
+      propertyPath: damage
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5633624894269688839, guid: bd88876807e1991419066c6966f2a412, type: 3}
       propertyPath: attackShapeObject
       value: 
       objectReference: {fileID: 5866488226273677200, guid: 01b6beaf3d7a73042b1dbf96bdbe7d78, type: 3}

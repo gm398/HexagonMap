@@ -1,12 +1,20 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &417115152356315380
+--- !u!1001 &5433109079587729119
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1572770075101463085, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 1572770075101463085, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.38
+      objectReference: {fileID: 0}
     - target: {fileID: 2227696945528292650, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -51,29 +59,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3977909169234094950, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
-      propertyPath: armor
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 3977909169234094950, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
-      propertyPath: maxHealth
-      value: 200
+    - target: {fileID: 3985757968013294449, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4488814483083410071, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 29ad29cd78584aa49bd4a77ae7f9488c, type: 2}
+      objectReference: {fileID: 2100000, guid: d40a06673ba9e8b4da44394cd6c90c53, type: 2}
     - target: {fileID: 5103229582248272901, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
       propertyPath: m_Name
-      value: EnemyTank
+      value: enemyFlyer
       objectReference: {fileID: 0}
     - target: {fileID: 7415225474266603959, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
       propertyPath: speed
-      value: 0.5
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 7415225474266603959, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
-      propertyPath: resourceCost
-      value: 60
+      propertyPath: flyingUnit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7415225474266603959, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
+      propertyPath: heightStep
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8429933655007955035, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
       propertyPath: m_AnchorMax.x
@@ -84,12 +92,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9102599861241858287, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
-      propertyPath: canAttackAir
-      value: 0
+      propertyPath: range
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9102599861241858287, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
+      propertyPath: rangedUnit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9102599861241858287, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
+      propertyPath: attackSpeed
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9102599861241858287, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}
       propertyPath: attackTypeObject
       value: 
-      objectReference: {fileID: 6407310750169638633, guid: 8de395a566838974b8c988b07458a600, type: 3}
+      objectReference: {fileID: 1603726789600599780, guid: 19e0c659ae84ca24bbbbc483b365ef4f, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eecb4809aaa12a2469b234c62804e7ca, type: 3}

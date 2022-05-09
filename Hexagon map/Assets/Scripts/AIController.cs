@@ -31,8 +31,10 @@ public class AIController : MonoBehaviour
 
     private void Awake()
     {
+        mainBase = GameObject.FindGameObjectWithTag("EnemyBase");
         baseController = mainBase.GetComponentInChildren<MainBaseController>();
         hexGrid = GameObject.FindGameObjectWithTag("Map").GetComponent<HexGrid>();
+        
         foreach (PriorityUnit u in units) {
             ratioTotal += (int)u.idealRatio;
             totalUnits += (int)u.currentNumber;
@@ -44,9 +46,9 @@ public class AIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        SpawnUnit();
         if (timer >= 1 / commandsPerSecond)
         {
-            SpawnUnit();
             DecideTactic();
             AssignTarget();
             timer = 0;

@@ -4,5 +4,20 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 290d4dd39c4f0b045ac943ff179b5d7c
+  - enabled: 1
+    path: Assets/Scenes/GameTest.unity
+    guid: 5bacaa49b061f5e4289ecc985c7206ce
+  - enabled: 1
+    path: Assets/Scenes/SimpleLevel.unity
+    guid: fa6b5899d5584ea478ad1e6bcfd63e0a
+  - enabled: 1
+    path: Assets/Scenes/TutorialLevel.unity
+    guid: dfe4d47267a9b514b8b3d83efb4bf2a3
+  - enabled: 1
+    path: Assets/Scenes/SurvivalMode.unity
+    guid: a2d00cefbf3c0514cadeadc8167826ae
   m_configObjects: {}

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,14 +24,11 @@ public class MainBaseController : MonoBehaviour
     [SerializeField] GameObject resourceDisplay;
     GameObject currentUnitToSpawn;
 
-    [SerializeField] GameObject normalUnit;
-    [SerializeField] Text normalResourceText;
-    [SerializeField] GameObject tankUnit;
-    [SerializeField] Text tankResourceText;
-    [SerializeField] GameObject flyingUnit;
-    [SerializeField] Text flyingResourceText;
-    [SerializeField] GameObject healerUnit;
-    [SerializeField] Text healerResourceText;
+    [SerializeField] List<UnitMenuItem> units;
+    [SerializeField] GameObject display;
+    [SerializeField] GameObject canvas;
+
+   
 
 
     private void Awake()
@@ -43,15 +41,19 @@ public class MainBaseController : MonoBehaviour
             
         if (!playerUnit) { visionController.SetVisible(false); resourceDisplay.SetActive(false); }
         else { Invoke("UpdateVision", 1f); }//updates vision once everything has been loaded
+        float displayOffset = 850;
+        Canvas c = canvas.GetComponentInChildren<Canvas>();
+        foreach (UnitMenuItem u in units)
+        {
+            GameObject b = Instantiate(display);
+            b.transform.SetParent(c.transform, false);
+            b.transform.position = new Vector3(80, displayOffset, 0);
+            u.InitializeButton(b);
 
-        normalResourceText.text = "Standard: " 
-            + normalUnit.GetComponentInChildren<UnitController>().GetResourceCost().ToString("F0");
-        tankResourceText.text = "Tank: "
-            + tankUnit.GetComponentInChildren<UnitController>().GetResourceCost().ToString("F0");
-        flyingResourceText.text = "Flying: "
-            + flyingUnit.GetComponentInChildren<UnitController>().GetResourceCost().ToString("F0");
-        healerResourceText.text = "Healer: "
-            + healerUnit.GetComponentInChildren<UnitController>().GetResourceCost().ToString("F0");
+            displayOffset -= 100;
+        }
+        SetSelected(false);
+
     }
 
     // Update is called once per frame
@@ -122,6 +124,7 @@ public class MainBaseController : MonoBehaviour
         resourceText.text = "Resources: " + this.resources.ToString("F0");
     }
 
+    /*
     public void SpawnNormalUnit() {
         currentUnitToSpawn = normalUnit;
         
@@ -130,6 +133,7 @@ public class MainBaseController : MonoBehaviour
     public void SpawnTankUnit() { currentUnitToSpawn = tankUnit; SpawnUnit(); }
     public void SpawnFlyingUnit() { currentUnitToSpawn = flyingUnit; SpawnUnit(); }
     public void SpawnHealerUnit() { currentUnitToSpawn = healerUnit; SpawnUnit(); }
+    */
     void CheckForCenterHex()
     {
         Hex temp;
@@ -183,4 +187,23 @@ public class MainBaseController : MonoBehaviour
     public bool IsPlayerUnit() { return playerUnit; }
     public Hex GetCenterHex() { return centerHex; }
     public int GetSpawnRange() { return spawnRange; }
+
+
+    [Serializable]
+    private class UnitMenuItem
+    {
+        public GameObject unit;
+        GameObject button;
+
+        public void InitializeButton(GameObject button)
+        {
+            this.button = button;
+            Text t = button.GetComponentInChildren<Text>();
+            Button b = button.GetComponentInChildren<Button>();
+            t.text = unit.name + " " + unit.GetComponentInChildren<UnitController>().GetResourceCost();
+            MainBaseController mbc = GameObject.FindGameObjectWithTag("MainBase").GetComponent<MainBaseController>();
+            b.onClick.AddListener(() => mbc.SpawnUnit(unit));
+        }
+
+    }
 }

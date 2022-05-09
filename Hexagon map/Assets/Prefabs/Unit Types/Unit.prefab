@@ -140,7 +140,7 @@ MeshCollider:
   m_GameObject: {fileID: 1292655337744668650}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -308,6 +308,7 @@ GameObject:
   - component: {fileID: 1760412095488897884}
   - component: {fileID: 2631276983238564523}
   - component: {fileID: 5462010791298498910}
+  - component: {fileID: 7907295856277529673}
   m_Layer: 8
   m_Name: Unit
   m_TagString: Untagged
@@ -404,6 +405,8 @@ MonoBehaviour:
   rangedUnit: 0
   attackSpeed: 1
   canAttackAir: 1
+  canAttack: 1
+  isMoving: 0
   target: {fileID: 0}
   attackTypeObject: {fileID: 7605159984477298860, guid: 779940092255391429fed0013a5b91f9, type: 3}
 --- !u!114 &1760412095488897884
@@ -452,13 +455,27 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 0.5
+  m_Height: 0.4
   m_Radius: 0.1
   m_SlopeLimit: 45
   m_StepOffset: 0.1
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.25, z: 0}
+--- !u!136 &7907295856277529673
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5205895895043749384}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.25
+  m_Height: 0.5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.3, z: 0}
 --- !u!1 &8105948838608793941
 GameObject:
   m_ObjectHideFlags: 0
