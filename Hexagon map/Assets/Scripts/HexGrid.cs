@@ -30,6 +30,7 @@ public class HexGrid : MonoBehaviour
     {
         Debug.Log("hello world");
     }
+
     
     public bool FindPath(Hex start, Hex goal, GameObject unit, out List<Hex> rout, float heightStep)
     {

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ThirdPersonController : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class ThirdPersonController : MonoBehaviour
     bool ranged;
     bool canAttackAir;
     float attackSpeed;
+
+    [SerializeField] Image reloadImage;
     bool canAttack = true;
     List<Hex> currentAim = new List<Hex>();
     Vector3 facingDirection = new Vector3(0, 0, 0);
@@ -187,6 +190,7 @@ public class ThirdPersonController : MonoBehaviour
                     attackType.PlayerAttack(hexFaced.GetHexCoordinates().GetHexCoordsRQS(), facingDirection, layers, canAttackAir);
                     canAttack = false;
                     Invoke("ResetAttack", 1 / attackSpeed);
+                    reloadImage.color = Color.red;
                 }
             }
         }
@@ -196,12 +200,14 @@ public class ThirdPersonController : MonoBehaviour
             canAttack = false;
             Debug.Log("attacked");
             Invoke("ResetAttack", 1 / attackSpeed);
+            reloadImage.color = Color.red;
         }
     }
 
     void ResetAttack()
     {
         canAttack = true;
+        reloadImage.color = Color.green;
     }
 
     void GroundMovement()
