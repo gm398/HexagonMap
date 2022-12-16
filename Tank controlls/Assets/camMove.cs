@@ -55,6 +55,7 @@ public class camMove : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        TankMovement();
         transform.position = player.transform.position;
 
         float yRot = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
@@ -68,12 +69,14 @@ public class camMove : MonoBehaviour
         rot -= xRot;
         rot = Mathf.Clamp(rot, elevationUp, elevationDown);
         camXRotation.localEulerAngles = new Vector3(rot, 0, 0);
-
+    }
+    private void Update()
+    {
         float gunRot = Input.mouseScrollDelta.y * scrollPower * Time.deltaTime;
         foreach (TurretController tc in turretControllers)
         {
             tc.ChangeElevation(gunRot);
-            tc.FaceDirection(transform.eulerAngles.y);
+            tc.FaceDirection(transform.forward);
         }
         if (Input.GetKey(KeyCode.Mouse0))
         {
@@ -81,43 +84,16 @@ public class camMove : MonoBehaviour
             {
                 tc.Shoot();
             }
-            
-            
         }
-
         if (Input.GetKeyDown(KeyCode.Z))
         {
             currentTarget++;
-            if(currentTarget >= targets.Length)
+            if (currentTarget >= targets.Length)
             { currentTarget = 0; }
             AttachToTarget(targets[currentTarget]);
-            
+
         }
-        //transform.Rotate(xRot, 0, 0);
-
-        
-        //float tX = gun.localEulerAngles.x;
-        //float turretX = transform.localEulerAngles.x;
-        //tX = (tX + 360) % 360;
-        //turretX = (turretX + 360) % 360;
-        //int direc = 1;
-        //if(tX < turretX)
-        //{
-        //    direc = -1;
-        //}
-        //float rot = tX + 5 * direc + minGunAngle;
-
-        //rot = (rot + 360) % 360;
-
-        //if(rot <= maxGunAngle && rot >= 0)
-        //{
-        //    gun.Rotate(5 * direc, 0, 0);
-        //}
-
-
-        
     }
-
     public void AttachToTarget(GameObject target)
     {
         player = target;
@@ -130,4 +106,57 @@ public class camMove : MonoBehaviour
             turrets.Add(tc.gameObject.transform);
         }
     }
+    void TankMovement()
+    {
+        
+        Vector2 direc = new Vector2(0, 0);
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            Vector2 dir = new Vector2(transform.forward.x, transform.forward.z);
+            // MoveTank(dir);
+            direc += dir;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            Vector2 dir = -new Vector2(transform.forward.x, transform.forward.z);
+            //MoveTank(-dir);
+            direc += dir;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            Vector2 dir = new Vector2(transform.right.x, transform.right.z);
+            //MoveTank(dir);
+            direc += dir;
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            Vector2 dir = -new Vector2(transform.right.x, transform.right.z);
+            // MoveTank(-dir);
+            direc += dir;
+        }
+
+        int forward = 1;
+        if (transform.localEulerAngles.y > 90 && transform.localEulerAngles.y < 270)
+        {
+            forward = -1;
+        }
+        if (Input.GetKey(KeyCode.E))
+        {
+            Vector2 dir = forward * new Vector2(player.transform.right.x, player.transform.right.z) * 100 + new Vector2(transform.forward.x, transform.forward.z);
+            direc += dir.normalized;
+        }
+        if (Input.GetKey(KeyCode.Q))
+        {
+            Vector2 dir = forward * -new Vector2(player.transform.right.x, player.transform.right.z) * 100 + new Vector2(transform.forward.x, transform.forward.z);
+            direc += dir.normalized;
+        }
+
+        if (direc != new Vector2(0, 0))
+        {
+            player.GetComponentInChildren<TankDrive>().MoveTank(direc);
+        }
+    }
+
+
 }

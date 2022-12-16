@@ -15,12 +15,29 @@ public class Gun : MonoBehaviour
     float
         timeOfNextShot = 0;
     [SerializeField]
-    Transform muzzel;
-
-      
-
+    Transform 
+        muzzel,
+        rotateBarrel;
+    [SerializeField]
+    int
+        numOfBarrels;
+    
+    private void Update()
+    {
+        if(rotateBarrel == null)
+        { return; }
+        if (timeOfNextShot > Time.time)
+        {
+            float deg = 360 / numOfBarrels * shotsPerSec * Time.deltaTime;
+            rotateBarrel.Rotate(0, 0, deg);
+        }
+        else
+        { rotateBarrel.localRotation = Quaternion.identity; }
+    }
     public void Shoot()
     {
+        if (!gameObject.activeSelf)
+        { return; }
         if (timeOfNextShot < Time.time)
         {
             if (smoke != null)
@@ -32,6 +49,7 @@ public class Gun : MonoBehaviour
             Rigidbody rb = b.GetComponent<Rigidbody>();
             rb.AddForce(muzzel.forward * force, ForceMode.Impulse);
             timeOfNextShot = Time.time + 1 / shotsPerSec;
+            Destroy(b, 3f);
         }
     }
 }
