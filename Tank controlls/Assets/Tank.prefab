@@ -130,9 +130,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4806735440055961583, guid: 8bdb23c228531cd4ea8a788d9c043eef, type: 3}
+      propertyPath: clampRotation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4806735440055961583, guid: 8bdb23c228531cd4ea8a788d9c043eef, type: 3}
+      propertyPath: rotationSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4806735440055961583, guid: 8bdb23c228531cd4ea8a788d9c043eef, type: 3}
+      propertyPath: elevationSpeed
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 6850169583185855920, guid: 8bdb23c228531cd4ea8a788d9c043eef, type: 3}
       propertyPath: m_Name
       value: TankTurret
+      objectReference: {fileID: 0}
+    - target: {fileID: 9093252613270955219, guid: 8bdb23c228531cd4ea8a788d9c043eef, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 9093252613270955219, guid: 8bdb23c228531cd4ea8a788d9c043eef, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 9093252613270955219, guid: 8bdb23c228531cd4ea8a788d9c043eef, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8bdb23c228531cd4ea8a788d9c043eef, type: 3}

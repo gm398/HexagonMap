@@ -8,16 +8,22 @@ public class TurretController : MonoBehaviour
     [SerializeField]
     GameObject[] 
         guns;
+
     [SerializeField]
     float
-        maxElevation,
-        minElevation,
-        maxRotLeft,
-        maxRotRight,
-        rotationSpeed;
+        maxElevation = 90,
+        minElevation = -20,
+        elevationSpeed = 10,
+        maxRotLeft = 90,
+        maxRotRight = 90,
+        rotationSpeed = 10;
+    [SerializeField]
+    bool
+        clampRotation = true;
 
     public float
         currentElevation,
+        originalElevation,
         currentRotation,
         originalRotation;
     bool
@@ -35,12 +41,17 @@ public class TurretController : MonoBehaviour
         
         if(guns.Length > 0)
         {
-            currentElevation = guns[0].transform.localEulerAngles.x;
+            originalElevation = guns[0].transform.localEulerAngles.x;
+            if(originalElevation > 180)
+            {
+                originalElevation -= 360;
+            }
         }
+        currentElevation = originalElevation;
         ChangeElevation(0);
     }
-
    
+
     public void FaceDirection(Vector3 dir)
     {
         float direction = 0;
@@ -49,21 +60,36 @@ public class TurretController : MonoBehaviour
         if (Input.GetKey(KeyCode.T))
         { direction = 1; }
         float angleBetween = Vector3.SignedAngle(transform.forward, dir, transform.up);
-        Debug.Log("signedAngle = "+angleBetween);
-        float curr = (currentRotation - 180) % 180;
-        Debug.Log("currentRotation = " + curr);
+        //Debug.Log(dir);
         direction = Mathf.Sign(angleBetween);
-        //if (currentRotation + angleBetween < maxRotLeft + originalRotation)
-        //{ direction = 1;}
-        //if (currentRotation + angleBetween > maxRotRight + originalRotation)
-        //{ direction = -1;}
-
+        if(Mathf.Abs(angleBetween) < 1)
+        {
+            direction = angleBetween;
+            isAvailable = true;
+        }else{
+            isAvailable = false;
+        }
+        
+        if (clampRotation)
+        {
+            if ((currentRotation + angleBetween < maxRotLeft + originalRotation || currentRotation + angleBetween > maxRotRight + originalRotation))//given rotation is outside possible turret rotation
+            {
+                if (currentRotation > originalRotation)
+                { direction = -1; }
+                else
+                { direction = 1; }
+                ChangeElevation(Mathf.Sign(originalElevation - currentElevation));//reset elevation
+            }
+        }
         RotateTurret(direction);
     }
     void RotateTurret(float degree)
     {
         currentRotation += degree * rotationSpeed * Time.deltaTime;
-        currentRotation = Mathf.Clamp(currentRotation, maxRotLeft + originalRotation, maxRotRight + originalRotation);
+        if (!clampRotation)
+        {
+            currentRotation = Mathf.Clamp(currentRotation, maxRotLeft + originalRotation, maxRotRight + originalRotation);
+        }
         //Debug.Log(currentRotation);
         transform.localEulerAngles = new Vector3(0, currentRotation, 0);
     }
@@ -77,7 +103,7 @@ public class TurretController : MonoBehaviour
    
     public void ChangeElevation(float degree)
     {
-        currentElevation += degree;
+        currentElevation += degree * elevationSpeed * Time.deltaTime;
         currentElevation = Mathf.Clamp(currentElevation, maxElevation, minElevation);
         foreach (GameObject g in guns)
         {

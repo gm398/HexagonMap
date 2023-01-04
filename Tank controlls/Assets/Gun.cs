@@ -43,13 +43,14 @@ public class Gun : MonoBehaviour
             if (smoke != null)
             {
                 GameObject s = Instantiate(smoke, muzzel.position, muzzel.rotation);
+                s.transform.localScale = transform.lossyScale;
                 Destroy(s, 1.5f);
             }
             GameObject b = Instantiate(bullet, muzzel.position, muzzel.rotation);
             Rigidbody rb = b.GetComponent<Rigidbody>();
             rb.AddForce(muzzel.forward * force, ForceMode.Impulse);
             timeOfNextShot = Time.time + 1 / shotsPerSec;
-            Destroy(b, 3f);
+            //Destroy(b, 3f);
         }
     }
 }

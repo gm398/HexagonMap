@@ -47,7 +47,7 @@ public class RocketPack : MonoBehaviour
             Rigidbody rb = b.GetComponent<Rigidbody>();
             rb.AddForce(muzzels[currentMuzzel].forward * force, ForceMode.Impulse);
             timeOfNextShot = Time.time + 1 / shotsPerSec;
-            Destroy(b, 3f);
+            //Destroy(b, 3f);
 
             currentMuzzel++;
             if(currentMuzzel >= muzzels.Count)

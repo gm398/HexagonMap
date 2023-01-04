@@ -65,9 +65,9 @@ MonoBehaviour:
   - {fileID: 8778200233686476355}
   - {fileID: 8373654890663907898}
   - {fileID: 3546595361228910703}
-  rocket: {fileID: 7033473165121892184, guid: 44a30ad3574b83e4a9a125209c197caf, type: 3}
+  rocket: {fileID: 3800182346436392677, guid: d46e5d5d39fe32443a89d01de9b538e2, type: 3}
   smoke: {fileID: 0}
-  force: 40
+  force: 20
   shotsPerSec: 5
 --- !u!1 &870609282416043469
 GameObject:

@@ -245,9 +245,15 @@ MonoBehaviour:
   - {fileID: 6539379109415149232}
   maxElevation: 80
   minElevation: -30
+  elevationSpeed: 10
   maxRotLeft: 90
   maxRotRight: 90
-  rotationSpeed: 10
+  rotationSpeed: 50
+  clampRotation: 1
+  currentElevation: 0
+  originalElevation: 0
+  currentRotation: 0
+  originalRotation: 0
 --- !u!1001 &4823202707572381820
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -277,11 +283,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2076936345638966993, guid: 21ffd2282c02ebd4fb0793b5b4bcdefd, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9891316
       objectReference: {fileID: 0}
     - target: {fileID: 2076936345638966993, guid: 21ffd2282c02ebd4fb0793b5b4bcdefd, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0.14703259
       objectReference: {fileID: 0}
     - target: {fileID: 2076936345638966993, guid: 21ffd2282c02ebd4fb0793b5b4bcdefd, type: 3}
       propertyPath: m_LocalRotation.y
@@ -293,7 +299,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2076936345638966993, guid: 21ffd2282c02ebd4fb0793b5b4bcdefd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: -16.91
       objectReference: {fileID: 0}
     - target: {fileID: 2076936345638966993, guid: 21ffd2282c02ebd4fb0793b5b4bcdefd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y

@@ -136,11 +136,10 @@ public class camMove : MonoBehaviour
             direc += dir;
         }
 
-        int forward = 1;
-        if (transform.localEulerAngles.y > 90 && transform.localEulerAngles.y < 270)
-        {
-            forward = -1;
-        }
+        
+        float relativeDirec = Vector3.SignedAngle(transform.forward, player.transform.right, player.transform.up);
+        Debug.Log(relativeDirec);
+        int forward = (int)Mathf.Sign(relativeDirec);
         if (Input.GetKey(KeyCode.E))
         {
             Vector2 dir = forward * new Vector2(player.transform.right.x, player.transform.right.z) * 100 + new Vector2(transform.forward.x, transform.forward.z);
